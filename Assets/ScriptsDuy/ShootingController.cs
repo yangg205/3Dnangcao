@@ -14,6 +14,12 @@ public class ShootingController : MonoBehaviour
     public float reloadTime = 1.5f;
     [SerializeField]
     private bool isReloading = false;
+    public ParticleSystem muzzleFlash;
+
+    //Sound
+    public AudioSource soundAudioSource;
+    public AudioClip shootingSoundClip;
+    public AudioClip reloadSoundClip;
 
     void Start()
     {
@@ -64,8 +70,11 @@ public class ShootingController : MonoBehaviour
 
                 //apply damage to zombie
             }
+            muzzleFlash.Play();
             animator.SetBool("Shoot", true);
             currentAmmo--;
+
+            soundAudioSource.PlayOneShot(shootingSoundClip);
         }
         else
         {
@@ -80,6 +89,7 @@ public class ShootingController : MonoBehaviour
             animator.SetTrigger("Reload");
             isReloading = true;
             //play reload sound
+            soundAudioSource.PlayOneShot(reloadSoundClip);
             Invoke("FinishReloading", reloadTime);
 
         }
