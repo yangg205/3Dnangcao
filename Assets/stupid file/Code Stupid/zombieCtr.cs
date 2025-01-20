@@ -1,4 +1,5 @@
-    using UnityEngine;
+using JetBrains.Annotations;
+using UnityEngine;
     using UnityEngine.AI;
     using UnityEngine.UIElements;
 
@@ -15,8 +16,8 @@
         public Camera AttackingRAycastArea;
         public Transform LookPoint;
         public LayerMask PlayerLayer;
+        public bool isdead =true ;
         
-
         [Header("Zombie Guarding Var")]
         public GameObject[] walkPoints;
         int currentZombiePosition = 0; 
@@ -26,7 +27,8 @@
         [Header("Zombie Attacking var")]
         public float timeBtwAttack;
         bool previouslyAttack;
-
+        [Header("Zombie Animation")]
+        public Animator anim; 
         [Header("Zombie mod/states")]
         public float visionRadius;
         public float attackingRadius; 
@@ -39,11 +41,18 @@
 
         void Update()
         {
+           if (isdead= true)
+           {
+            zombieDie();
+            return ;
+           }
             playerInvisionRadius = Physics.CheckSphere(transform.position,visionRadius,PlayerLayer);
             playerInattackingRadius = Physics.CheckSphere(transform.position,attackingRadius,PlayerLayer);
             if(!playerInvisionRadius && !playerInvisionRadius) Guard();
             if (playerInvisionRadius && playerInvisionRadius) Pursueplayer();
             if(playerInvisionRadius && playerInattackingRadius) AttackPlayer();
+            
+          
         }
         private void Guard()
         {
@@ -60,7 +69,20 @@
         }
     private void Pursueplayer()
     {
-        zombieAgent.SetDestination(playerBody.position);
+        if(zombieAgent.SetDestination(playerBody.position))
+        {
+            anim.SetBool("Walking",false);
+            anim.SetBool("Running",true);
+            anim.SetBool("Attacking",false);
+            
+        }
+        else
+        {
+            anim.SetBool("Walking",true);
+            anim.SetBool("Running",false);
+            anim.SetBool("Attacking",false);
+        }
+   
     }
     private void AttackPlayer()
     {
@@ -71,10 +93,14 @@
             RaycastHit hitInfo;
             if(Physics.Raycast(AttackingRAycastArea.transform.position, AttackingRAycastArea.transform.forward,out hitInfo, attackingRadius))
             {
-                Debug.Log("Attacking"+ hitInfo.transform.name);
+                Debug.Log("Attacking "+ hitInfo.transform.name);
+                 anim.SetBool("Walking",false);
+            anim.SetBool("Running",false);
+            anim.SetBool("Attacking",true);
             }
             previouslyAttack = true;
             Invoke(nameof(ActiveAttacking), timeBtwAttack);
+
         }
     }
     public void ActiveAttacking()
@@ -86,11 +112,13 @@
         presentHealth -= takeDamage;
         if(presentHealth <= 0)
         {
+            anim.enabled = false;
             zombieDie();
         }
     }
     private void zombieDie()
     {
+        anim.enabled= false ;
         zombieAgent.SetDestination(transform.position);
         ZombieSpeed = 0f;
         attackingRadius = 0f; 
