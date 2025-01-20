@@ -25,3 +25,9 @@ public class Top10
     public bool status;
     public List<PlayerBackup> data;
 }
+[Serializable]
+public class loginorregister
+{
+    public bool status;
+    public Player data;
+}
