@@ -41,11 +41,7 @@ using UnityEngine;
 
         void Update()
         {
-           if (isdead= true)
-           {
-            zombieDie();
-            return ;
-           }
+        
             playerInvisionRadius = Physics.CheckSphere(transform.position,visionRadius,PlayerLayer);
             playerInattackingRadius = Physics.CheckSphere(transform.position,attackingRadius,PlayerLayer);
             if(!playerInvisionRadius && !playerInvisionRadius) Guard();
