@@ -199,6 +199,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 140035e2fe065134aba228ec10fd96ac, type: 3}
+--- !u!1 &117809769 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2551955939053861864, guid: a4f64d97c31e42b44b7a1c042e213c35, type: 3}
+  m_PrefabInstance: {fileID: 515906945}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &175063746
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,6 +213,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 175063747}
+  - component: {fileID: 175063748}
   m_Layer: 0
   m_Name: tiendat
   m_TagString: Untagged
@@ -270,6 +276,23 @@ Transform:
   - {fileID: 1020134054}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &175063748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 175063746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db28cf8cbd078044bb13f6efb03020b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weapons:
+  - {fileID: 315050135}
+  - {fileID: 117809769}
+  - {fileID: 259417785}
+  currentWeaponIndex: 0
 --- !u!1001 &180911660
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -463,6 +486,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 782099722015888197, guid: 44f78b98bb705704a86127ce68d48b4e, type: 3}
   m_PrefabInstance: {fileID: 621806979}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &259417785 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7817461166628979511, guid: a4f64d97c31e42b44b7a1c042e213c35, type: 3}
+  m_PrefabInstance: {fileID: 515906945}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &303164478
 GameObject:
   m_ObjectHideFlags: 0
@@ -571,6 +599,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 82.16, z: 0}
+--- !u!1 &315050135 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7290659775027589020, guid: a4f64d97c31e42b44b7a1c042e213c35, type: 3}
+  m_PrefabInstance: {fileID: 515906945}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &334865412 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8409827964164901728, guid: 0a984da1cd0ebf846ab2481ce6b77b3f, type: 3}
@@ -1847,7 +1880,7 @@ Terrain:
   m_GameObject: {fileID: 1159952746}
   m_Enabled: 1
   serializedVersion: 6
-  m_TerrainData: {fileID: 15600000, guid: 8ac4a4b04c659aa4aa3ffa645f878e57, type: 2}
+  m_TerrainData: {fileID: 0}
   m_TreeDistance: 5000
   m_TreeBillboardDistance: 50
   m_TreeCrossFadeLength: 5
