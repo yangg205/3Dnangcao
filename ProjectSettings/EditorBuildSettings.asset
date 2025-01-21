@@ -15,5 +15,6 @@ EditorBuildSettings:
     path: Assets/Map 2.unity
     guid: 2702ffd78b6834a449b600a8a3a61b99
   m_configObjects:
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: aa49e6b17a314cd4d90087e91806c3fa, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   m_UseUCBPForAssetBundles: 0
