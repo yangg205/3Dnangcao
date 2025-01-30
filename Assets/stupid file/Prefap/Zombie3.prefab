@@ -429,7 +429,6 @@ GameObject:
   - component: {fileID: 6825739894121467818}
   - component: {fileID: 7309627900670879352}
   - component: {fileID: 7701142727153551788}
-  - component: {fileID: 7318530426068285449}
   m_Layer: 0
   m_Name: Zombie3
   m_TagString: Untagged
@@ -499,40 +498,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &7318530426068285449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1198082959181282077}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fcdc3371d29bde4cb0da412acec6e49, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GiveDamage: 5
-  zombieAgent: {fileID: 7701142727153551788}
-  playerBody: {fileID: 0}
-  AttackingRAycastArea: {fileID: 1329864045889696632}
-  LookPoint: {fileID: 0}
-  PlayerLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  isdead: 1
-  walkPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  ZombieSpeed: 2
-  walkingpointRadius: 2
-  timeBtwAttack: 2
-  anim: {fileID: 7309627900670879352}
-  visionRadius: 3
-  attackingRadius: 10
-  playerInvisionRadius: 0
-  playerInattackingRadius: 0
 --- !u!1 &1284516738019501673
 GameObject:
   m_ObjectHideFlags: 0
