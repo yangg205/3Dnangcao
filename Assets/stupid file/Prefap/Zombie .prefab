@@ -1049,6 +1049,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4290b68ee5a28404181f4ee72caa370c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: Zombie Women
+  TimeRadollDie: 0
+  Radoll: {fileID: 0}
   Hp: 100
   Nav: {fileID: 2578357535979703066}
   currentState: 0

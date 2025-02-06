@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AI;
 using System.Collections;
@@ -6,6 +6,10 @@ using JetBrains.Annotations;
 
 public class ZombieAi : MonoBehaviour
 {
+    public string name; 
+    public float TimeRadollDie; 
+   
+    
     public float Hp = 100;
     public NavMeshAgent Nav;
     public  enum ZombieState 
@@ -26,6 +30,7 @@ public class ZombieAi : MonoBehaviour
     private float lastAttackTime;
     void Start()
     {
+        gameObject.name = "Type:" + name;
         animator = GetComponent<Animator>();
         Nav = GetComponent<NavMeshAgent>();
         lastAttackTime = -AttackCooldown;
@@ -75,8 +80,9 @@ public class ZombieAi : MonoBehaviour
 
                 break;
                 case ZombieState.Dead:
-                animator.enabled = false;
-                Destroy(gameObject, 2f);
+                StartCoroutine(RadollDie());
+
+               
                 Debug.Log("Dead");
                 break; 
         }
@@ -100,4 +106,18 @@ public class ZombieAi : MonoBehaviour
           
         }
     }
+    private IEnumerator RadollDie()
+    {
+        animator.enabled = false;
+        yield return new WaitForSeconds(TimeRadollDie);
+        foreach (Rigidbody Rig in gameObject.GetComponentsInChildren<Rigidbody>())
+        {
+            Rig.isKinematic= true ;
+        }
+        foreach (Collider Co in gameObject.GetComponentsInChildren<Collider>())
+        {
+            Co.enabled = false ;      
+            
+        }   
+    }  
 }
