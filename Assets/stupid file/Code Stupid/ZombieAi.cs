@@ -8,9 +8,9 @@ public class ZombieAi : MonoBehaviour
 {
     public string name; 
     public float TimeRadollDie; 
-   
-    
-    public float Hp = 100;
+    [SerializeField,Range(0f,15f)]
+    private float ChaseSpeed= 5f;
+    public float Hp = 100f;
     public NavMeshAgent Nav;
     public  enum ZombieState 
     {
