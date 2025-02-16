@@ -8,6 +8,7 @@ public class WaypointZombie : MonoBehaviour
 {
     public float Hp = 100;
     public NavMeshAgent Nav;
+    public float ChaseSpeed =1; 
     public enum ZombieState
     {
         Walk,
@@ -101,7 +102,7 @@ public class WaypointZombie : MonoBehaviour
     private void Walk()
     {
         animator.SetBool("IsWalking", false);
-        Nav.speed = 0.3f;
+        Nav.speed = ChaseSpeed;
         Vector3 randomPosition = RandomNavMeshPosion();
         Nav.SetDestination(randomPosition);
         IsMoving = true;

@@ -6,7 +6,8 @@ using JetBrains.Annotations;
 
 public class ZombieAi : MonoBehaviour
 {
-    public string name; 
+    
+  
     public float TimeRadollDie; 
     [SerializeField,Range(0f,15f)]
     private float ChaseSpeed= 5f;
@@ -34,6 +35,7 @@ public class ZombieAi : MonoBehaviour
         animator = GetComponent<Animator>();
         Nav = GetComponent<NavMeshAgent>();
         lastAttackTime = -AttackCooldown;
+        
     }
     private void Awake()
     {
@@ -120,4 +122,14 @@ public class ZombieAi : MonoBehaviour
             
         }   
     }  
+    private void RotateTowardsPlayer()
+    {
+       
+        Vector3 direction = (player.position - transform.position).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+       
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * ChaseSpeed);
+    }
+    
 }
