@@ -6,14 +6,14 @@ using JetBrains.Annotations;
 
 public class ZombieAi : MonoBehaviour
 {
-    
-  
-    public float TimeRadollDie; 
-    [SerializeField,Range(0f,15f)]
-    private float ChaseSpeed= 5f;
+
+    waveSpaner spawner;
+    public float TimeRadollDie;
+    [SerializeField, Range(0f, 15f)]
+    private float ChaseSpeed = 5f;
     public float Hp = 100f;
     public NavMeshAgent Nav;
-    public  enum ZombieState 
+    public enum ZombieState
     {
         Idle,
         Chase,
@@ -23,11 +23,11 @@ public class ZombieAi : MonoBehaviour
     public ZombieState currentState = ZombieState.Idle;
     public Animator animator;
     public Transform player;
-    public float chaseDistance =10f;
+    public float chaseDistance = 10f;
     public float AttackDistance = 2f;
     public float AttackCooldown = 2f;
     public float AttackDelay = 1.5f;
-    private bool isAttacking; 
+    private bool isAttacking;
     private float lastAttackTime;
     void Start()
     {
@@ -35,7 +35,7 @@ public class ZombieAi : MonoBehaviour
         animator = GetComponent<Animator>();
         Nav = GetComponent<NavMeshAgent>();
         lastAttackTime = -AttackCooldown;
-        
+
     }
     private void Awake()
     {
@@ -44,7 +44,7 @@ public class ZombieAi : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        switch (currentState) 
+        switch (currentState)
         {
             case ZombieState.Idle:
                 //Animation 
@@ -65,12 +65,12 @@ public class ZombieAi : MonoBehaviour
                     currentState = ZombieState.Attack;
                 }
                 break;
-                case ZombieState.Attack:
+            case ZombieState.Attack:
                 //Animations
                 animator.SetBool("IsAttacking", true);
                 Nav.SetDestination(transform.position);
                 if (!isAttacking && Time.time - lastAttackTime >= AttackCooldown)
-                {   
+                {
                     StartCoroutine(AttackWithdelay());
                     Debug.Log("attack player");
                     //
@@ -81,12 +81,14 @@ public class ZombieAi : MonoBehaviour
                 }
 
                 break;
-                case ZombieState.Dead:
+            case ZombieState.Dead:
                 StartCoroutine(RadollDie());
-
-               
-                Debug.Log("Dead");
-                break; 
+                if (spawner != null)
+                {
+                    spawner.CurrentZombie.Remove(this.gameObject);
+                    Debug.Log("Dead");
+                }
+                break;
         }
     }
     private IEnumerator AttackWithdelay()
@@ -95,7 +97,7 @@ public class ZombieAi : MonoBehaviour
 
         yield return new WaitForSeconds(AttackDelay);
 
-        isAttacking =false;
+        isAttacking = false;
         lastAttackTime = Time.time;
     }
     void TakeDame(int dame)
@@ -105,7 +107,7 @@ public class ZombieAi : MonoBehaviour
         {
             Hp = 0;
             currentState = ZombieState.Dead;
-          
+
         }
     }
     private IEnumerator RadollDie()
@@ -114,22 +116,17 @@ public class ZombieAi : MonoBehaviour
         yield return new WaitForSeconds(TimeRadollDie);
         foreach (Rigidbody Rig in gameObject.GetComponentsInChildren<Rigidbody>())
         {
-            Rig.isKinematic= true ;
+            Rig.isKinematic = true;
         }
         foreach (Collider Co in gameObject.GetComponentsInChildren<Collider>())
         {
-            Co.enabled = false ;      
-            
-        }   
-    }  
-    private void RotateTowardsPlayer()
-    {
-       
-        Vector3 direction = (player.position - transform.position).normalized;
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
+            Co.enabled = false;
 
-       
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * ChaseSpeed);
+        }
     }
-    
+
+    public void setSpawner(waveSpaner _spawner)
+    {
+        spawner = _spawner;
+    }
 }
