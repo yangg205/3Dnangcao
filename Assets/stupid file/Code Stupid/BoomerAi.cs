@@ -4,6 +4,7 @@ using System.Collections;
 
 public class BoomerAi : MonoBehaviour
 {
+    waveSpaner spawner;
     public GameObject explosionEffectPrefab; 
     public LayerMask LayerPlayer;
     private float ChaseSpeed = 5f;
@@ -131,5 +132,9 @@ public class BoomerAi : MonoBehaviour
             
             Destroy(explosionEffect, 0.5f);  
         }
+    }
+    public void setSpawner(waveSpaner _spawner)
+    {
+        spawner = _spawner;
     }
 }

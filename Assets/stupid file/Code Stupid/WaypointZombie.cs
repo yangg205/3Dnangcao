@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.AI;
 using System.Collections;
 using JetBrains.Annotations;
-
+using TMPro;
 public class WaypointZombie : MonoBehaviour
 {
     public float Hp = 100;

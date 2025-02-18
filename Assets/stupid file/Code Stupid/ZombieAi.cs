@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.AI;
 using System.Collections;
-using JetBrains.Annotations;
+
 
 public class ZombieAi : MonoBehaviour
 {
@@ -83,11 +83,7 @@ public class ZombieAi : MonoBehaviour
                 break;
             case ZombieState.Dead:
                 StartCoroutine(RadollDie());
-                if (spawner != null)
-                {
-                    spawner.CurrentZombie.Remove(this.gameObject);
-                    Debug.Log("Dead");
-                }
+                
                 break;
         }
     }

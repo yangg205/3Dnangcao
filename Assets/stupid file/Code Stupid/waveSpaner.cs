@@ -3,64 +3,70 @@ using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.UI;
+[System.Serializable]
+public class wave
+{
+    public string waveName;
+    public int noOfEnemies;
+    public GameObject[] typeOfEnemies;
+    public float spawnerInterval;
+
+}
 public class waveSpaner : MonoBehaviour
 {
-    [System.Serializable]
-    public class waveContent
+
+    public wave[] Waves;
+    public Transform[] sqawnPoints;
+    private wave currentWave;
+    private int currentWaveNumber;
+    private float nextSpawntime;
+    private bool canSpawn = true;
+    public Animator animator;
+    public Text wave_name;
+    private bool canAnimtate = false;
+    private void Update()
     {
-        [SerializeField][NonReorderable] GameObject[] zombieSpawn;
-        public GameObject[] getZombieSpawnList()
+        currentWave = Waves[currentWaveNumber];
+        SpawmWawe();
+        GameObject[] totalEnemies = GameObject.FindGameObjectsWithTag("Enemy");
+        if (totalEnemies.Length == 0)
         {
-            return zombieSpawn;
+            if (currentWaveNumber + 1 != Waves.Length)
+            {
+                if (canAnimtate)
+                {
+                    wave_name.text = Waves[currentWaveNumber + 1].waveName;
+                    animator.SetTrigger("WaveComplete");
+                    canAnimtate = false;
+                }
+
+            }
+            else 
+            {
+                Debug.Log("GameFinshing");
+            }
         }
     }
-    [SerializeField][NonReorderable] waveContent[] waves;
-    int currentWave = 0;
-    float spawnRange = 10;
-    public List<GameObject> CurrentZombie;
-    public int Enemieskilled;
-    void Start()
+    void spawnWaweNextWave()
     {
-        SpawnWave();
+        currentWaveNumber++;
+        canSpawn = true;
     }
-    void Update()
+    void SpawmWawe()
     {
-        if (CurrentZombie.Count ==0)
+        if (canSpawn && nextSpawntime < Time.time)
         {
-            currentWave++;
-            SpawnWave();
+            GameObject randomEnemy = currentWave.typeOfEnemies[Random.Range(0, currentWave.typeOfEnemies.Length)];
+            Transform randomPoint = sqawnPoints[Random.Range(0, sqawnPoints.Length)];
+            Instantiate(randomEnemy, randomPoint.position, Quaternion.identity);
+            currentWave.noOfEnemies--;
+            nextSpawntime = Time.time + currentWave.spawnerInterval;
+            if (currentWave.noOfEnemies == 0)
+            {
+                canSpawn = false;
+                canAnimtate = true;
+            }
         }
-    }
-    void SpawnWave()
-    {
-
-        for (int i = 0; i < waves[currentWave].getZombieSpawnList().Length; i++)
-        {
-            GameObject newspawn = Instantiate(waves[currentWave].getZombieSpawnList()[i], FindSpawnLoc(), Quaternion.identity);
-            CurrentZombie.Add(newspawn);
-
-            ZombieAi monster = newspawn.GetComponent<ZombieAi>();
-            monster.setSpawner(this);
-        }
-
-    }
-    Vector3 FindSpawnLoc()
-    {
-        Vector3 Spawnpos;
-
-        float xLoc = Random.Range(-spawnRange, spawnRange) + transform.position.x;
-        float zloc = Random.Range(-spawnRange, spawnRange) + transform.position.z;
-        float yloc = transform.position.y;
-
-        Spawnpos = new Vector3(xLoc, yloc, zloc);
-        if (Physics.Raycast(Spawnpos, Vector3.down, 5))
-        {
-            return Spawnpos;
-        }
-        else
-        {
-            return FindSpawnLoc();
-        }
-
     }
 }
