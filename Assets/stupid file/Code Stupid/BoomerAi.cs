@@ -50,7 +50,7 @@ public class BoomerAi : MonoBehaviour
                 animator.SetBool("IsWalking", true);
                 animator.SetBool("IsAttacking", false);
 
-                // Move towards player
+                
                 Nav.SetDestination(player.position);
 
                 if (Vector3.Distance(transform.position, player.position) <= AttackDistance)
