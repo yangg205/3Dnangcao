@@ -5,19 +5,24 @@ using System.Collections;
 using System;
 using Unity.VisualScripting;
 using CodeMonkey.HealthSystemCM;
+using UnityEngine.InputSystem;
 
 
 public class ZombieAi : MonoBehaviour
 {
-    
-    public Collider collider ;
+    public float DissolveRate = 0.00125f;
+    public float refreshRate = 0.0025f;
+    public SkinnedMeshRenderer SkinnedMesh;
+    private Material[] skinnedMaterrials;
+
+    public Collider collider;
     waveSpaner spawner;
     public float TimeRadollDie;
     [SerializeField, Range(0f, 15f)]
     private float ChaseSpeed = 5f;
     public float MaxHp = 100f;
     [SerializeField]
-    private float currentHp ;
+    private float currentHp;
     public NavMeshAgent Nav;
     public enum ZombieState
     {
@@ -37,17 +42,22 @@ public class ZombieAi : MonoBehaviour
     private float lastAttackTime;
     void Start()
     {
+        if (SkinnedMesh != null)
+        {
+            skinnedMaterrials = SkinnedMesh.materials;
+        }
+        
         collider = GetComponentInChildren<CapsuleCollider>();
         currentHp = MaxHp;
         gameObject.name = "Type:" + name;
         animator = GetComponent<Animator>();
         Nav = GetComponent<NavMeshAgent>();
         lastAttackTime = -AttackCooldown;
-    foreach (Collider Co in gameObject.GetComponentsInChildren<Collider>())
+        foreach (Collider Co in gameObject.GetComponentsInChildren<Collider>())
         {
             Co.enabled = true;
 
-       }
+        }
     }
     private void Awake()
     {
@@ -94,8 +104,9 @@ public class ZombieAi : MonoBehaviour
 
                 break;
             case ZombieState.Dead:
+            Nav.SetDestination(transform.position);
                 StartCoroutine(RadollDie());
-
+                StartCoroutine(Dissolveco());
                 break;
         }
     }
@@ -108,17 +119,18 @@ public class ZombieAi : MonoBehaviour
         isAttacking = false;
         lastAttackTime = Time.time;
     }
-   
+
     public void TakeDamageAmount(int damageAmount)
     {
 
-        if(currentState == ZombieState.Dead){
-        Debug.Log("die");
-        return ; 
+        if (currentState == ZombieState.Dead)
+        {
+            Debug.Log("die");
+            return;
         }
         currentHp -= damageAmount;
         Debug.Log(currentHp);
-        if(currentHp <=0)
+        if (currentHp <= 0)
         {
             currentHp = 0;
             currentState = ZombieState.Dead;
@@ -127,7 +139,7 @@ public class ZombieAi : MonoBehaviour
     private IEnumerator RadollDie()
     {
         animator.enabled = false;
-        collider.enabled =false;
+        collider.enabled = false;
         foreach (Collider Co in gameObject.GetComponentsInChildren<Collider>())
         {
             Co.enabled = true;
@@ -147,10 +159,37 @@ public class ZombieAi : MonoBehaviour
             Co.enabled = false;
 
         }
+        yield return new WaitForSeconds(2f);
+        Destroy(gameObject);
     }
 
     public void setSpawner(waveSpaner _spawner)
     {
         spawner = _spawner;
     }
+    IEnumerator Dissolveco()
+    {
+        if (skinnedMaterrials.Length > 0)
+        {
+            float counter = 0;
+            while (counter < 1)
+            {
+                counter += DissolveRate; // Make it frame-rate independent
+                //counter = Mathf.Clamp(counter, 0, 1); // Ensure it does not exceed 1
+
+                for (int i = 0; i < skinnedMaterrials.Length; i++)
+                {
+                    skinnedMaterrials[i].SetFloat("_DissolveAmount", counter);
+                }
+                yield return null; // Wait until the next frame
+            }
+
+            // Ensure the final state is set to 1
+            for (int i = 0; i < skinnedMaterrials.Length; i++)
+            {
+                skinnedMaterrials[i].SetFloat("_DissolveAmount", 1);
+            }
+        }
+    }
 }
+
