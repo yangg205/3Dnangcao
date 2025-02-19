@@ -621,7 +621,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29b6be234d82a8d4cadbf01a00bbd3d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionEffectPrefab: {fileID: 8805423449216515269, guid: cdbd5cb7142929744812d8f265259e3d, type: 3}
+  explosionEffectPrefab: {fileID: 7275589439748196008, guid: dfb63f2c6abde5d478abcb727652424b, type: 3}
   LayerPlayer:
     serializedVersion: 2
     m_Bits: 128

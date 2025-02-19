@@ -1,9 +1,12 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using Unity.Mathematics;
 
 public class BoomerAi : MonoBehaviour
 {
+    public float hp =10;
+    public CapsuleCollider collider;
     waveSpaner spawner;
     public GameObject explosionEffectPrefab; 
     public LayerMask LayerPlayer;
@@ -31,6 +34,7 @@ public class BoomerAi : MonoBehaviour
 
     void Start()
     {
+        collider = GetComponent<CapsuleCollider>();
         gameObject.name = "BoomerZombie";
         animator = GetComponent<Animator>();
         Nav = GetComponent<NavMeshAgent>();
@@ -60,20 +64,9 @@ public class BoomerAi : MonoBehaviour
                 break;
 
             case ZombieState.Attack:
-                animator.SetBool("IsAttacking", true);
+               
                 Nav.SetDestination(transform.position);
-
-                if (!isAttacking && Time.time - lastAttackTime >= AttackCooldown)
-                {   
-                    StartCoroutine(AttackWithDelay());
-                    Debug.Log("Attacking player");
-                }
-
-                if (Vector3.Distance(transform.position, player.position) > AttackDistance)
-                {
-                    currentState = ZombieState.Chase;
-                }
-
+                Explosion();
                 break;
 
             case ZombieState.Dead:
@@ -84,7 +77,6 @@ public class BoomerAi : MonoBehaviour
                 {
                     for (int i = 0; i < boom.Length; i++)
                     {
-                        
                         
                        
                     }
@@ -130,11 +122,28 @@ public class BoomerAi : MonoBehaviour
             GameObject explosionEffect = Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
 
             
-            Destroy(explosionEffect, 0.5f);  
+            Destroy(explosionEffect, 2f);  
         }
     }
     public void setSpawner(waveSpaner _spawner)
     {
         spawner = _spawner;
+    }
+    public void Explosion()
+    {
+        HandleExplosionEffect();
+         Collider[] boom = Physics.OverlapSphere(transform.position, explosionRadius, LayerPlayer);
+        
+                if (boom != null && boom.Length > 0)
+                {
+                    for (int i = 0; i < boom.Length; i++)
+                    {
+                        
+                        
+                       
+                    }
+                }
+                Destroy(gameObject);
+       
     }
 }

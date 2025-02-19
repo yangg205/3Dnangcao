@@ -2,16 +2,22 @@
 using UnityEngine.UI;
 using UnityEngine.AI;
 using System.Collections;
+using System;
+using Unity.VisualScripting;
+using CodeMonkey.HealthSystemCM;
 
 
 public class ZombieAi : MonoBehaviour
 {
-
+    
+    public Collider collider ;
     waveSpaner spawner;
     public float TimeRadollDie;
     [SerializeField, Range(0f, 15f)]
     private float ChaseSpeed = 5f;
-    public float Hp = 100f;
+    public float MaxHp = 100f;
+    [SerializeField]
+    private float currentHp ;
     public NavMeshAgent Nav;
     public enum ZombieState
     {
@@ -31,11 +37,17 @@ public class ZombieAi : MonoBehaviour
     private float lastAttackTime;
     void Start()
     {
+        collider = GetComponentInChildren<CapsuleCollider>();
+        currentHp = MaxHp;
         gameObject.name = "Type:" + name;
         animator = GetComponent<Animator>();
         Nav = GetComponent<NavMeshAgent>();
         lastAttackTime = -AttackCooldown;
+    foreach (Collider Co in gameObject.GetComponentsInChildren<Collider>())
+        {
+            Co.enabled = true;
 
+       }
     }
     private void Awake()
     {
@@ -83,7 +95,7 @@ public class ZombieAi : MonoBehaviour
                 break;
             case ZombieState.Dead:
                 StartCoroutine(RadollDie());
-                
+
                 break;
         }
     }
@@ -96,19 +108,35 @@ public class ZombieAi : MonoBehaviour
         isAttacking = false;
         lastAttackTime = Time.time;
     }
-    void TakeDame(int dame)
+   
+    public void TakeDamageAmount(int damageAmount)
     {
-        Hp -= dame;
-        if (Hp < 0)
-        {
-            Hp = 0;
-            currentState = ZombieState.Dead;
 
+        if(currentState == ZombieState.Dead){
+        Debug.Log("die");
+        return ; 
+        }
+        currentHp -= damageAmount;
+        Debug.Log(currentHp);
+        if(currentHp <=0)
+        {
+            currentHp = 0;
+            currentState = ZombieState.Dead;
         }
     }
     private IEnumerator RadollDie()
     {
         animator.enabled = false;
+        collider.enabled =false;
+        foreach (Collider Co in gameObject.GetComponentsInChildren<Collider>())
+        {
+            Co.enabled = true;
+
+        }
+        foreach (Rigidbody Rig in gameObject.GetComponentsInChildren<Rigidbody>())
+        {
+            Rig.isKinematic = false;
+        }
         yield return new WaitForSeconds(TimeRadollDie);
         foreach (Rigidbody Rig in gameObject.GetComponentsInChildren<Rigidbody>())
         {
