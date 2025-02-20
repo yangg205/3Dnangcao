@@ -17,6 +17,8 @@ public class ShootingController : MonoBehaviour
     public float reloadTime = 1.5f;
     private bool isReloading = false;
     public ParticleSystem muzzleFlash;
+    public ParticleSystem bloodEffect;
+    public int damagePerShot = 10;
     void Start()
     {
         currentAmmo = maxAmmo;
@@ -65,6 +67,14 @@ public class ShootingController : MonoBehaviour
                 Debug.Log(hit.transform.name);
 
                 //apply damage zombie
+                ZombieAI zombieAI = hit.collider.GetComponent<ZombieAI>();
+                if(zombieAI != null)
+                {
+                    zombieAI.TakeDamage(damagePerShot);
+                    //play blood effect at this point
+                    ParticleSystem blood = Instantiate(bloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                    Destroy(blood.gameObject, blood.main.duration);
+                }
             }
             muzzleFlash.Play();
             animator.SetBool("Shoot", true);

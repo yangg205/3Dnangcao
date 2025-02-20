@@ -2,6 +2,12 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    //Player Health
+    private int maxHealth = 100;
+    public int currentHealth;
+
+    //Slider Health
+    //DeathScreen
     //Player Movement
     public float movementSpeed = 5f;
     private CharacterController controller;
@@ -18,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 velocity;
     void Start()
     {
+        currentHealth = maxHealth;
         controller = GetComponent<CharacterController>();
     }
     void Update()
@@ -49,5 +56,19 @@ public class PlayerMovement : MonoBehaviour
     void HandleGravity()
     {
         velocity.y += gravity * Time.deltaTime;
+    }
+    public void TakeDamage(int damageAmount)
+    {
+        currentHealth -= damageAmount;
+        if(currentHealth <= 0)
+        {
+            currentHealth = 0;
+            Die();
+        }
+    }
+    private void Die()
+    {
+        //deathScreen
+        Debug.Log("You die");
     }
 }
