@@ -22,6 +22,15 @@ public class ZombieAI : MonoBehaviour
     private GameObject instantiatedObject;
     void Start()
     {
+        GameObject playerObject = GameObject.FindWithTag("Player");
+        if (playerObject != null)
+        {
+            player = playerObject.transform;
+        }
+        else
+        {
+            Debug.Log("Player object not found");
+        }
         animator = GetComponent<Animator>();
         capsuleCollider = GetComponent<CapsuleCollider>();
         navAgent = GetComponent<NavMeshAgent>();
