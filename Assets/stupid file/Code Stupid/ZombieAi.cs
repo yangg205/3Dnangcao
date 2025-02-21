@@ -10,7 +10,7 @@ using UnityEngine.VFX;
 
 public class ZombieAi : MonoBehaviour
 {
-    public VisualEffect VFXGrah; 
+   
     public float DissolveRate = 0.00125f;
     public float refreshRate = 0.0025f;
     public SkinnedMeshRenderer SkinnedMesh;
@@ -170,10 +170,6 @@ public class ZombieAi : MonoBehaviour
     }
     IEnumerator Dissolveco()
     {
-        if(VFXGrah != null)
-        {
-            VFXGrah.Play();
-        }
         if (skinnedMaterrials.Length > 0)
         {
             float counter = 0;

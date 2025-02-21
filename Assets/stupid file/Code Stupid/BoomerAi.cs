@@ -5,13 +5,14 @@ using Unity.Mathematics;
 
 public class BoomerAi : MonoBehaviour
 {
-    public float hp =10;
+    public float knockbackForce = 500f;
+    
     public CapsuleCollider collider;
     waveSpaner spawner;
     public GameObject explosionEffectPrefab; 
     public LayerMask LayerPlayer;
     private float ChaseSpeed = 5f;
-    public float Hp = 100f;
+    public float currentHp = 100f;
     public NavMeshAgent Nav;
     public enum ZombieState 
     {
@@ -89,10 +90,10 @@ public class BoomerAi : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        Hp -= damage;
-        if (Hp <= 0)
+        currentHp -= damage;
+        if (currentHp <= 0)
         {
-            Hp = 0;
+            currentHp = 0;
             currentState = ZombieState.Dead;
         }
     }
@@ -126,11 +127,19 @@ public class BoomerAi : MonoBehaviour
         
                 if (boom != null && boom.Length > 0)
                 {
-                    for (int i = 0; i < boom.Length; i++)
+                    foreach(Collider Playerr in boom )
                     {
-                        
-                        
-                       
+                        Hp hp =  Playerr.GetComponent<Hp>();
+                        if(hp != null)
+                        {
+                            hp.TakeDamage(10);
+                        }
+                        Rigidbody rb = Playerr.GetComponent<Rigidbody>();
+                        if(rb != null)
+                        {
+                             Vector3 knockbackDir = (player.transform.position - transform.position).normalized;
+                            rb.AddForce(knockbackDir * knockbackForce);
+                        }
                     }
                 }
                 Destroy(gameObject);

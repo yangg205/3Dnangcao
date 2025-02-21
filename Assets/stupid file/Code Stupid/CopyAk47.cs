@@ -83,7 +83,7 @@ public class CopyAk47 : MonoBehaviour
                 }
                 if(tankAi !=null)
                 {
-                    tankAi.TakeDame(100);
+                    tankAi.TakeDamageAmount(100);
                 }
             }
             muzzleFlash.Play();

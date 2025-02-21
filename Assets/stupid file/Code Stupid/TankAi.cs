@@ -1,119 +1,189 @@
-using Mono.Cecil.Cil;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.AI;
+using System.Collections;
+using System;
+using Unity.VisualScripting;
+using CodeMonkey.HealthSystemCM;
+using UnityEngine.InputSystem;
+using UnityEngine.VFX;
 
 public class TankAI : MonoBehaviour
 {
-    public int Hp;
-    public int currentHp;
-    public Transform player;
-    public GameObject rockPrefab;
-    public Transform throwPoint;
+   
+    public float DissolveRate = 0.00125f;
+    public float refreshRate = 0.0025f;
+    public SkinnedMeshRenderer SkinnedMesh;
+    private Material[] skinnedMaterrials;
+
+    public Collider collider;
+    waveSpaner spawner;
+    public float TimeRadollDie;
+    [SerializeField, Range(0f, 15f)]
+    private float ChaseSpeed = 5f;
+    public float MaxHp = 500f;
+    [SerializeField]
+    private float currentHp;
+    public NavMeshAgent Nav;
+    public enum ZombieState
+    {
+        
+        Chase,
+        Attack,
+        Dead
+    }
+    public ZombieState currentState = ZombieState.Chase;
     public Animator animator;
-    public NavMeshAgent agent;
-
-    public float meleeRange = 3f;
-    public float throwRange = 15f;
-    public float attackCooldown = 3f;
-    public float throwCooldown = 5f;
-
-    private float nextAttackTime = 0f;
-    private float nextThrowTime = 0f;
-
+    public Transform player;
+    public float chaseDistance = 10f;
+    
+    public float attackRange = 3f;      
+    public float attackForce = 500f;
+    public float AttackCooldown = 2f;
+    public float AttackDelay = 1.5f;
+    private bool isAttacking;
+    private float lastAttackTime;
     void Start()
     {
-        currentHp = Hp;
+        if (SkinnedMesh != null)
+        {
+            skinnedMaterrials = SkinnedMesh.materials;
+        }
+        
+        collider = GetComponentInChildren<CapsuleCollider>();
+        currentHp = MaxHp;
+        gameObject.name = "Type:" + name;
         animator = GetComponent<Animator>();
-        agent = GetComponent<NavMeshAgent>();
+        Nav = GetComponent<NavMeshAgent>();
+        lastAttackTime = -AttackCooldown;
+        foreach (Collider Co in gameObject.GetComponentsInChildren<Collider>())
+        {
+            Co.enabled = true;
+
+        }
     }
-    void Awake()
+    private void Awake()
     {
         player = GameObject.Find("Player").transform;
     }
+    // Update is called once per frame
     void Update()
     {
-        if
-        if (player == null) return;
-
-        float distance = Vector3.Distance(transform.position, player.position);
-
-        // Nếu trong tầm đánh, chọn ngẫu nhiên giữa cận chiến & ném đá
-        if (Time.time >= nextAttackTime && distance <= throwRange)
-        {
-            if (distance <= meleeRange || Random.value > 0.5f) // 50% đánh gần, 50% ném đá
-            { 
-                agent.SetDestination(player.position);
-                MeleeAttack();
-            }
-            else
-            {
-                agent.SetDestination(transform.position);
-                ThrowRock();
-            }
-
-            nextAttackTime = Time.time + attackCooldown;
-        }
-
-       
-    }
-
-    void MeleeAttack()
-    {
-        animator.SetTrigger("Melee");
-        Debug.Log("Tank performs a melee attack!");
-    }
-
-    void ThrowRock()
-    {
-        if (Time.time < nextThrowTime || rockPrefab == null) return;
-        
-        animator.SetTrigger("Throw");
-        Invoke("SpawnRock", 0.5f);
-        nextThrowTime = Time.time + throwCooldown;
-    }
-
-   void SpawnRock()
-{
-    if (rockPrefab == null || throwPoint == null || player == null) return;
-
-    GameObject rock = Instantiate(rockPrefab, throwPoint.position, Quaternion.identity);
-    if (rock == null) return;
-
-    Rigidbody rb = rock.GetComponent<Rigidbody>();
-    if (rb != null)
-    {
-        Vector3 direction = (player.position - throwPoint.position).normalized; // Hướng về người chơi
-        rb.linearVelocity = direction * 20f; // Tăng tốc độ để ném mạnh hơn
-
-        // Xoay viên đá theo hướng bay
-        rock.transform.rotation = Quaternion.LookRotation(direction);
-
-        // Thêm xoay vòng khi bay (giống hiệu ứng ném đá)
-        rb.angularVelocity = Random.insideUnitSphere * 10f;
-    }
-}
-
-    Vector3 CalculateThrowVelocity(Vector3 startPoint, Vector3 targetPoint, float timeToTarget)
-    {
-        Vector3 velocity = (targetPoint - startPoint) / timeToTarget;
-        velocity.y += 0.5f * Mathf.Abs(Physics.gravity.y) * timeToTarget;
-        return velocity;
-    }
-
-    public void TakeDame(int Dame)
-    {
-        currentHp -= Dame;
-        if (currentHp <= 0)
+        switch (currentState)
         {
             
-            Die();
+            case ZombieState.Chase:
+                animator.SetBool("IsWalking", true);
+                animator.SetBool("IsAttacking", false);
+                //Animations
+                Nav.SetDestination(player.position);
+                if (Vector3.Distance(transform.position, player.position) <= attackRange)
+                {
+                    currentState = ZombieState.Attack;
+                }
+                break;
+            case ZombieState.Attack:
+                //Animations
+                animator.SetBool("IsAttacking", true);
+                Nav.SetDestination(transform.position);
+                if (!isAttacking && Time.time - lastAttackTime >= AttackCooldown)
+                {
+                    StartCoroutine(AttackWithdelay());
+                    Debug.Log("attack player");
+                    //
+                }
+                if (Vector3.Distance(transform.position, player.position) >= attackRange)
+                {
+                    currentState = ZombieState.Chase;
+                }
+
+                break;
+            case ZombieState.Dead:
+            Nav.SetDestination(transform.position);
+                StartCoroutine(RadollDie());
+                StartCoroutine(Dissolveco());
+                break;
         }
     }
-    void Die()
+    private IEnumerator AttackWithdelay()
     {
-        agent.isStopped = true;
-        animator.enabled = false;
-        Destroy(gameObject,5f);
+        isAttacking = true;
+
+        yield return new WaitForSeconds(AttackDelay);
+
+        isAttacking = false;
+        lastAttackTime = Time.time;
     }
 
+    public void TakeDamageAmount(int damageAmount)
+    {
+
+        if (currentState == ZombieState.Dead)
+        {
+            Debug.Log("die");
+            return;
+        }
+        currentHp -= damageAmount;
+        Debug.Log(currentHp);
+        if (currentHp <= 0)
+        {
+            currentHp = 0;
+            currentState = ZombieState.Dead;
+        }
+    }
+    private IEnumerator RadollDie()
+    {
+        animator.enabled = false;
+        collider.enabled = false;
+        foreach (Collider Co in gameObject.GetComponentsInChildren<Collider>())
+        {
+            Co.enabled = true;
+
+        }
+        foreach (Rigidbody Rig in gameObject.GetComponentsInChildren<Rigidbody>())
+        {
+            Rig.isKinematic = false;
+        }
+        yield return new WaitForSeconds(TimeRadollDie);
+        foreach (Rigidbody Rig in gameObject.GetComponentsInChildren<Rigidbody>())
+        {
+            Rig.isKinematic = true;
+        }
+        foreach (Collider Co in gameObject.GetComponentsInChildren<Collider>())
+        {
+            Co.enabled = false;
+
+        }
+        yield return new WaitForSeconds(2f);
+        Destroy(gameObject);
+    }
+
+    public void setSpawner(waveSpaner _spawner)
+    {
+        spawner = _spawner;
+    }
+    IEnumerator Dissolveco()
+    {
+        if (skinnedMaterrials.Length > 0)
+        {
+            float counter = 0;
+            while (counter < 1)
+            {
+                counter += DissolveRate; // Make it frame-rate independent
+                //counter = Mathf.Clamp(counter, 0, 1); // Ensure it does not exceed 1
+                
+                for (int i = 0; i < skinnedMaterrials.Length; i++)
+                {
+                    skinnedMaterrials[i].SetFloat("_DissolveAmount", counter);
+                }
+                yield return null; // Wait until the next frame
+            }
+            // Ensure the final state is set to 1
+            for (int i = 0; i < skinnedMaterrials.Length; i++)
+            {
+                skinnedMaterrials[i].SetFloat("_DissolveAmount", 1);
+            }
+        }
+    }
 }
+
