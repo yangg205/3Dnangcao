@@ -26,8 +26,6 @@ public class BoomerAi : MonoBehaviour
     public float AttackDistance = 2f;
     public float AttackCooldown = 2f;
     public float AttackDelay = 1.5f;
-    private bool isAttacking; 
-    private float lastAttackTime;
 
     public float explosionRadius = 20f;
     public int explosionDamage = 50;
@@ -38,7 +36,6 @@ public class BoomerAi : MonoBehaviour
         gameObject.name = "BoomerZombie";
         animator = GetComponent<Animator>();
         Nav = GetComponent<NavMeshAgent>();
-        lastAttackTime = -AttackCooldown;
     }
 
     private void Awake()
@@ -88,16 +85,7 @@ public class BoomerAi : MonoBehaviour
         }
     }
 
-    private IEnumerator AttackWithDelay()
-    {
-        isAttacking = true;
 
-        // Wait for the attack delay
-        yield return new WaitForSeconds(AttackDelay);
-
-        isAttacking = false;
-        lastAttackTime = Time.time;
-    }
 
     public void TakeDamage(int damage)
     {
@@ -111,8 +99,10 @@ public class BoomerAi : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, explosionRadius); // Show explosion radius in the editor
+        Gizmos.DrawWireSphere(transform.position, explosionRadius);
+        Gizmos.DrawWireSphere(transform.position, AttackDistance); // Show explosion radius in the editor
     }
     private void HandleExplosionEffect()
     {

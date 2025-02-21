@@ -72,6 +72,7 @@ public class CopyAk47 : MonoBehaviour
                 Debug.Log(hit.transform.name);
                 //apply damage to zombie
                 ZombieAi zombieAi = hit.collider.GetComponent<ZombieAi>();
+                TankAI tankAi = hit.collider.GetComponent<TankAI>();
                 if(zombieAi != null)
                     zombieAi.TakeDamageAmount(damagePershot);
                     Debug.Log("Dame Zombie");
@@ -79,6 +80,10 @@ public class CopyAk47 : MonoBehaviour
                 if(boomerAi != null)
                 {
                     boomerAi.TakeDamage(20);
+                }
+                if(tankAi !=null)
+                {
+                    tankAi.TakeDame(100);
                 }
             }
             muzzleFlash.Play();

@@ -1,92 +1,119 @@
+using Mono.Cecil.Cil;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class BossAI : MonoBehaviour
+public class TankAI : MonoBehaviour
 {
-     private void Awake()
+    public int Hp;
+    public int currentHp;
+    public Transform player;
+    public GameObject rockPrefab;
+    public Transform throwPoint;
+    public Animator animator;
+    public NavMeshAgent agent;
+
+    public float meleeRange = 3f;
+    public float throwRange = 15f;
+    public float attackCooldown = 3f;
+    public float throwCooldown = 5f;
+
+    private float nextAttackTime = 0f;
+    private float nextThrowTime = 0f;
+
+    void Start()
+    {
+        currentHp = Hp;
+        animator = GetComponent<Animator>();
+        agent = GetComponent<NavMeshAgent>();
+    }
+    void Awake()
     {
         player = GameObject.Find("Player").transform;
     }
-    public Transform player; // Reference to the player
-    public float moveSpeed = 3f; // Movement speed
-    public float attackRange = 5f; // Range for attacking
-    public float skillCooldown = 3f; // Cooldown for skills
-    private float lastSkillTime = 0f; // Last time a skill was used
-    public float jumpForce = 5f; // Force applied for the jump
-    private Rigidbody rb; // Rigidbody component
-
     void Update()
     {
-      
-            // Move towards the player
-            MoveTowardsPlayer();
+        if
+        if (player == null) return;
 
-            // Check if the boss can use a skill
-            if (Time.time >= lastSkillTime + skillCooldown)
-            {
-                UseSkill();
-                lastSkillTime = Time.time; // Reset the cooldown
-            }
-        
-    }
+        float distance = Vector3.Distance(transform.position, player.position);
 
-    private void MoveTowardsPlayer()
-    {
-        Vector3 direction = (player.position - transform.position).normalized;
-        transform.position += direction * moveSpeed * Time.deltaTime;
-        Quaternion lookRotation = Quaternion.LookRotation(direction);
-    transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
-    }
-
-    private void UseSkill()
-    {
-        int skillIndex = Random.Range(0, 3); // Randomly select a skill
-
-        switch (skillIndex)
+        // Nếu trong tầm đánh, chọn ngẫu nhiên giữa cận chiến & ném đá
+        if (Time.time >= nextAttackTime && distance <= throwRange)
         {
-            case 0:
-                Skill1();
-                break;
-            case 1:
-                Skill2();
-                break;
-            case 2:
-                Skill3();
-                break;
+            if (distance <= meleeRange || Random.value > 0.5f) // 50% đánh gần, 50% ném đá
+            { 
+                agent.SetDestination(player.position);
+                MeleeAttack();
+            }
+            else
+            {
+                agent.SetDestination(transform.position);
+                ThrowRock();
+            }
+
+            nextAttackTime = Time.time + attackCooldown;
+        }
+
+       
+    }
+
+    void MeleeAttack()
+    {
+        animator.SetTrigger("Melee");
+        Debug.Log("Tank performs a melee attack!");
+    }
+
+    void ThrowRock()
+    {
+        if (Time.time < nextThrowTime || rockPrefab == null) return;
+        
+        animator.SetTrigger("Throw");
+        Invoke("SpawnRock", 0.5f);
+        nextThrowTime = Time.time + throwCooldown;
+    }
+
+   void SpawnRock()
+{
+    if (rockPrefab == null || throwPoint == null || player == null) return;
+
+    GameObject rock = Instantiate(rockPrefab, throwPoint.position, Quaternion.identity);
+    if (rock == null) return;
+
+    Rigidbody rb = rock.GetComponent<Rigidbody>();
+    if (rb != null)
+    {
+        Vector3 direction = (player.position - throwPoint.position).normalized; // Hướng về người chơi
+        rb.linearVelocity = direction * 20f; // Tăng tốc độ để ném mạnh hơn
+
+        // Xoay viên đá theo hướng bay
+        rock.transform.rotation = Quaternion.LookRotation(direction);
+
+        // Thêm xoay vòng khi bay (giống hiệu ứng ném đá)
+        rb.angularVelocity = Random.insideUnitSphere * 10f;
+    }
+}
+
+    Vector3 CalculateThrowVelocity(Vector3 startPoint, Vector3 targetPoint, float timeToTarget)
+    {
+        Vector3 velocity = (targetPoint - startPoint) / timeToTarget;
+        velocity.y += 0.5f * Mathf.Abs(Physics.gravity.y) * timeToTarget;
+        return velocity;
+    }
+
+    public void TakeDame(int Dame)
+    {
+        currentHp -= Dame;
+        if (currentHp <= 0)
+        {
+            
+            Die();
         }
     }
-
-    private void Skill1()
+    void Die()
     {
-        JumpAttack();
-    GameObject fireballPrefab = Resources.Load<GameObject>("FireballPrefab");
-    GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
-    Vector3 direction = (player.position - transform.position).normalized;
-    fireball.GetComponent<Rigidbody>().linearVelocity = direction * 10f; // Set speed
+        agent.isStopped = true;
+        animator.enabled = false;
+        Destroy(gameObject,5f);
     }
 
-    private void Skill2()
-    {
-        JumpAttack();
-        Debug.Log("Boss uses Skill 2: Area Attack!");
-        // Implement skill logic here (e.g., deal damage in a radius)
-    }
-
-    private void Skill3()
-    {
-        Debug.Log("Jump");
-        // Implement skill logic here (e.g., spawn minions)
-        JumpAttack();
-    }
-    private void JumpAttack()
-    {
-        // Calculate the jump direction
-        Vector3 jumpDirection = (player.position - transform.position).normalized;
-        jumpDirection.y = 1; // Set the jump height
-
-        // Apply the jump force
-        rb.AddForce(jumpDirection * jumpForce, ForceMode.Impulse);
-        
-        // Optionally, you can add logic to deal damage upon landing
-        // Use OnCollisionEnter or similar to check for landing and damage
-    }
 }
