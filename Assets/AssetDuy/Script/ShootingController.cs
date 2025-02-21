@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShootingController : MonoBehaviour
 {
@@ -19,12 +21,15 @@ public class ShootingController : MonoBehaviour
     public ParticleSystem muzzleFlash;
     public ParticleSystem bloodEffect;
     public int damagePerShot = 10;
+
+    public TextMeshProUGUI currentAmmoText;
     void Start()
     {
         currentAmmo = maxAmmo;
     }
     void Update()
     {
+        currentAmmoText.text = currentAmmo.ToString();
         if(isReloading)
             return;
         if(isAuto == true)
@@ -75,6 +80,15 @@ public class ShootingController : MonoBehaviour
                     ParticleSystem blood = Instantiate(bloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
                     Destroy(blood.gameObject, blood.main.duration);
                 }
+                WaypointZombieAI waypoinZombieAI = hit.collider.GetComponent<WaypointZombieAI>();
+                if (waypoinZombieAI != null)
+                {
+                    waypoinZombieAI.TakeDamage(damagePerShot);
+                    //play blood effect at this point
+                    ParticleSystem blood = Instantiate(bloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                    Destroy(blood.gameObject, blood.main.duration);
+                }
+
             }
             muzzleFlash.Play();
             animator.SetBool("Shoot", true);

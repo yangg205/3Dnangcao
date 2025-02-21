@@ -63,7 +63,7 @@ public class ZombieAI : MonoBehaviour
                 navAgent.enabled = false;
                 capsuleCollider.enabled = false;
                 enabled = false;
-                //increase score
+                GameManager.instance.currentScore += 1;
                 Debug.Log("Dead");
                 break;
         }

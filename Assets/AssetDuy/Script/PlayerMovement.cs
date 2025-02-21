@@ -1,11 +1,15 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
     //Player Health
     private int maxHealth = 100;
     public int currentHealth;
+    public Slider healthSlider;
 
+    public DeathScreen deathScreen;
+    
     //Slider Health
     //DeathScreen
     //Player Movement
@@ -25,6 +29,9 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
+        healthSlider.minValue = 1;
+        healthSlider.maxValue = currentHealth;
+        healthSlider.value = currentHealth;
         controller = GetComponent<CharacterController>();
     }
     void Update()
@@ -60,6 +67,7 @@ public class PlayerMovement : MonoBehaviour
     public void TakeDamage(int damageAmount)
     {
         currentHealth -= damageAmount;
+        healthSlider.value -= damageAmount;
         if(currentHealth <= 0)
         {
             currentHealth = 0;
@@ -68,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Die()
     {
-        //deathScreen
+        deathScreen.showDeadScreen = true;
         Debug.Log("You die");
     }
 }
