@@ -406,7 +406,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e18c279f33a31fd4e8ea350bc6046056, type: 3}
   audioSource: {fileID: 6713508128916529958}
   collider: {fileID: 0}
-  TimeRadollDie: 3
+  TimeRadollDie: 5
   ChaseSpeed: 7.57
   MaxHp: 100
   currentHp: 0
