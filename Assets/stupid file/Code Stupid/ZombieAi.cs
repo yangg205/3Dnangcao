@@ -6,16 +6,16 @@ using System;
 using Unity.VisualScripting;
 using CodeMonkey.HealthSystemCM;
 using UnityEngine.InputSystem;
-using UnityEngine.VFX;
 
 public class ZombieAi : MonoBehaviour
 {
-   
+
     public float DissolveRate = 0.00125f;
     public float refreshRate = 0.0025f;
     public SkinnedMeshRenderer SkinnedMesh;
     private Material[] skinnedMaterrials;
-
+    public AudioClip[] deathSounds;
+    public AudioSource audioSource;
     public Collider collider;
     waveSpaner spawner;
     public float TimeRadollDie;
@@ -43,11 +43,12 @@ public class ZombieAi : MonoBehaviour
     private float lastAttackTime;
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         if (SkinnedMesh != null)
         {
             skinnedMaterrials = SkinnedMesh.materials;
         }
-        
+
         collider = GetComponentInChildren<CapsuleCollider>();
         currentHp = MaxHp;
         gameObject.name = "Type:" + name;
@@ -105,7 +106,9 @@ public class ZombieAi : MonoBehaviour
 
                 break;
             case ZombieState.Dead:
-            Nav.SetDestination(transform.position);
+                Nav.SetDestination(transform.position);
+
+
                 StartCoroutine(RadollDie());
                 StartCoroutine(Dissolveco());
                 break;
@@ -126,6 +129,7 @@ public class ZombieAi : MonoBehaviour
 
         if (currentState == ZombieState.Dead)
         {
+            audioSource.PlayOneShot(deathSounds[UnityEngine.Random.Range(0, deathSounds.Length)]);
             Debug.Log("die");
             return;
         }
@@ -139,6 +143,7 @@ public class ZombieAi : MonoBehaviour
     }
     private IEnumerator RadollDie()
     {
+
         animator.enabled = false;
         collider.enabled = false;
         foreach (Collider Co in gameObject.GetComponentsInChildren<Collider>())
