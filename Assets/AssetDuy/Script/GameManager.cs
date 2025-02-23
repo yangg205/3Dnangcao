@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,50 +10,57 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI highScoreText;
     public TextMeshProUGUI currentScoreText;
     public GameObject[] weapons;
+    private bool[] unlockedWeapons;
 
     [SerializeField] private int currentWeaponIndex = 0;
     void Start()
     {
         instance = this;
-        SwitchWeapon(currentWeaponIndex);
+        unlockedWeapons = new bool[weapons.Length];
+
+        foreach (GameObject weapon in weapons)
+        {
+            weapon.SetActive(false);
+        }
+        unlockedWeapons[0] = true;
+        weapons[0].SetActive(true);
+        currentWeaponIndex = 0;
     }
     void Update()
     {
-        if(currentScore > highScore)
+        if (currentScore > highScore)
         {
             highScore = currentScore;
         }
         highScoreText.text = highScore.ToString();
         currentScoreText.text = currentScore.ToString();
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        for (int i = 0; i < weapons.Length; i++)
         {
-            SwitchWeapon(0);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            SwitchWeapon(1);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            SwitchWeapon(2);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            SwitchWeapon(3);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            SwitchWeapon(4);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha6))
-        {
-            SwitchWeapon(5);
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
+            {
+                SwitchWeapon(i);
+            }
         }
     }
     void SwitchWeapon(int newIndex)
     {
-        weapons[currentWeaponIndex].SetActive(false);
-        weapons[newIndex].SetActive(true);
-        currentWeaponIndex = newIndex;  
-    }    
+        if (unlockedWeapons[newIndex] && newIndex != currentWeaponIndex)
+        {
+            // Ẩn vũ khí hiện tại
+            weapons[currentWeaponIndex].SetActive(false);
+
+            // Bật vũ khí mới
+            weapons[newIndex].SetActive(true);
+
+            // Cập nhật vũ khí hiện tại
+            currentWeaponIndex = newIndex;
+        }
+    }
+    public void UnlockWeapon(int index)
+    {
+        if (index >= 0 && index < weapons.Length)
+        {
+            unlockedWeapons[index] = true; // Đánh dấu vũ khí đã nhặt
+        }
+    }
 }
