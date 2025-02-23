@@ -2,14 +2,21 @@
 
 public class PickupWeapons : MonoBehaviour
 {
-    public int weaponIndex; // Vũ khí tương ứng với vị trí trong mảng weapons của GameManager
-
     private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Triggered by: " + other.name);
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("Player gần vũ khí!");
+            GameManager.instance.SetNearbyWeapon(gameObject);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            GameManager.instance.UnlockWeapon(weaponIndex);
-            Destroy(gameObject); // Xóa vũ khí khỏi cảnh sau khi nhặt
+            GameManager.instance.ClearNearbyWeapon(gameObject);
         }
     }
 }

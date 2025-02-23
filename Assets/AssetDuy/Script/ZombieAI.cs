@@ -11,8 +11,8 @@ public class ZombieAI : MonoBehaviour
     public Transform player;
     public float chaseDistance = 10f;
     public float attackDistance = 2f;
-    public float attackCooldown = 2f;
-    public float attackDelay = 1.5f;
+    public float attackCooldown = 4f;
+    public float attackDelay = 3.5f;
     public int damage = 10;
     public int health = 100;
     private CapsuleCollider capsuleCollider;

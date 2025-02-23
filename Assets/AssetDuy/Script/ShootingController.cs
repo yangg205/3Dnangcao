@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,12 +10,13 @@ public class ShootingController : MonoBehaviour
     public float fireRange = 10f;
     private float nextFireTime = 0f;
 
-    //Gun Mode
+    // Gun Mode
     public bool isAuto = false;
 
-    //Ammo and Reload
+    // Ammo and Reload
     public int maxAmmo = 30;
     private int currentAmmo;
+    public int totalAmmo = 90; // Tổng số đạn có thể mang
     public float reloadTime = 1.5f;
     private bool isReloading = false;
     public ParticleSystem muzzleFlash;
@@ -23,16 +24,20 @@ public class ShootingController : MonoBehaviour
     public int damagePerShot = 10;
 
     public TextMeshProUGUI currentAmmoText;
+    public TextMeshProUGUI totalAmmoText;
+
     void Start()
     {
         currentAmmo = maxAmmo;
+        UpdateAmmoUI();
     }
+
     void Update()
     {
-        currentAmmoText.text = currentAmmo.ToString();
-        if(isReloading)
+        if (isReloading)
             return;
-        if(isAuto == true)
+
+        if (isAuto)
         {
             if (Input.GetButton("Fire1") && Time.time >= nextFireTime)
             {
@@ -56,65 +61,85 @@ public class ShootingController : MonoBehaviour
                 animator.SetBool("Shoot", false);
             }
         }
-        if(Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo)
+
+        if (Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo && totalAmmo > 0)
         {
             Reload();
         }
-        
     }
+
     private void Shoot()
     {
-        if(currentAmmo > 0)
+        if (currentAmmo > 0)
         {
             RaycastHit hit;
             if (Physics.Raycast(firePoint.position, firePoint.forward, out hit, fireRange))
             {
                 Debug.Log(hit.transform.name);
 
-                //apply damage zombie
+                // Apply damage to zombies
                 ZombieAI zombieAI = hit.collider.GetComponent<ZombieAI>();
-                if(zombieAI != null)
+                if (zombieAI != null)
                 {
                     zombieAI.TakeDamage(damagePerShot);
-                    //play blood effect at this point
-                    ParticleSystem blood = Instantiate(bloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
-                    Destroy(blood.gameObject, blood.main.duration);
-                }
-                WaypointZombieAI waypoinZombieAI = hit.collider.GetComponent<WaypointZombieAI>();
-                if (waypoinZombieAI != null)
-                {
-                    waypoinZombieAI.TakeDamage(damagePerShot);
-                    //play blood effect at this point
                     ParticleSystem blood = Instantiate(bloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
                     Destroy(blood.gameObject, blood.main.duration);
                 }
 
+                WaypointZombieAI waypointZombieAI = hit.collider.GetComponent<WaypointZombieAI>();
+                if (waypointZombieAI != null)
+                {
+                    waypointZombieAI.TakeDamage(damagePerShot);
+                    ParticleSystem blood = Instantiate(bloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                    Destroy(blood.gameObject, blood.main.duration);
+                }
             }
+
             muzzleFlash.Play();
             animator.SetBool("Shoot", true);
             currentAmmo--;
+            UpdateAmmoUI();
         }
         else
         {
-            //Reload
             Reload();
         }
     }
+
     private void Reload()
     {
-        if(!isReloading && currentAmmo < maxAmmo)
+        if (!isReloading && totalAmmo > 0)
         {
             animator.SetTrigger("Reload");
             isReloading = true;
-            //play reload sound
             Invoke("FinishReloading", reloadTime);
-
         }
     }
+
     private void FinishReloading()
     {
-        currentAmmo = maxAmmo;
+        int ammoNeeded = maxAmmo - currentAmmo;
+        int ammoToReload = Mathf.Min(ammoNeeded, totalAmmo);
+
+        currentAmmo += ammoToReload;
+        totalAmmo -= ammoToReload;
+
         isReloading = false;
         animator.ResetTrigger("Reload");
+        UpdateAmmoUI();
+    }
+
+    private void UpdateAmmoUI()
+    {
+        currentAmmoText.text = currentAmmo.ToString();
+        totalAmmoText.text = totalAmmo.ToString();
+    }
+
+    public void PickupAmmo(int ammoAmount)
+    {
+        Debug.Log("Số đạn sau khi nhặt: " + totalAmmo); // Kiểm tra số đạn sau khi nhặt
+
+        totalAmmo += ammoAmount;
+        UpdateAmmoUI();
     }
 }
