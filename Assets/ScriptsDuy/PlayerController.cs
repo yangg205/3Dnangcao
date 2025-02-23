@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Windows;
 public class PlayerController : MonoBehaviour
 {
+    
     //Playermovenet & Gravity
     public float movementSpeed = 5f;
     public float jumpForce = 2f;

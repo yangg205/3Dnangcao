@@ -6,16 +6,13 @@ using System;
 using Unity.VisualScripting;
 using CodeMonkey.HealthSystemCM;
 using UnityEngine.InputSystem;
-using UnityEngine.VFX;
+
 
 public class TankAI : MonoBehaviour
 {
-   
+    public GameObject hitbox;
     public float DissolveRate = 0.00125f;
     public float refreshRate = 0.0025f;
-    public SkinnedMeshRenderer SkinnedMesh;
-    private Material[] skinnedMaterrials;
-
     public Collider collider;
     waveSpaner spawner;
     public float TimeRadollDie;
@@ -27,7 +24,6 @@ public class TankAI : MonoBehaviour
     public NavMeshAgent Nav;
     public enum ZombieState
     {
-        
         Chase,
         Attack,
         Dead
@@ -44,12 +40,7 @@ public class TankAI : MonoBehaviour
     private bool isAttacking;
     private float lastAttackTime;
     void Start()
-    {
-        if (SkinnedMesh != null)
-        {
-            skinnedMaterrials = SkinnedMesh.materials;
-        }
-        
+    {   
         collider = GetComponentInChildren<CapsuleCollider>();
         currentHp = MaxHp;
         gameObject.name = "Type:" + name;
@@ -84,8 +75,10 @@ public class TankAI : MonoBehaviour
                 break;
             case ZombieState.Attack:
                 //Animations
+                animator.SetBool("IsWalking", false);
                 animator.SetBool("IsAttacking", true);
                 Nav.SetDestination(transform.position);
+                transform.LookAt(player);
                 if (!isAttacking && Time.time - lastAttackTime >= AttackCooldown)
                 {
                     StartCoroutine(AttackWithdelay());
@@ -101,7 +94,7 @@ public class TankAI : MonoBehaviour
             case ZombieState.Dead:
             Nav.SetDestination(transform.position);
                 StartCoroutine(RadollDie());
-                StartCoroutine(Dissolveco());
+              
                 break;
         }
     }
@@ -162,28 +155,14 @@ public class TankAI : MonoBehaviour
     {
         spawner = _spawner;
     }
-    IEnumerator Dissolveco()
+    public void SetAtive()
     {
-        if (skinnedMaterrials.Length > 0)
-        {
-            float counter = 0;
-            while (counter < 1)
-            {
-                counter += DissolveRate; // Make it frame-rate independent
-                //counter = Mathf.Clamp(counter, 0, 1); // Ensure it does not exceed 1
-                
-                for (int i = 0; i < skinnedMaterrials.Length; i++)
-                {
-                    skinnedMaterrials[i].SetFloat("_DissolveAmount", counter);
-                }
-                yield return null; // Wait until the next frame
-            }
-            // Ensure the final state is set to 1
-            for (int i = 0; i < skinnedMaterrials.Length; i++)
-            {
-                skinnedMaterrials[i].SetFloat("_DissolveAmount", 1);
-            }
-        }
+        hitbox.SetActive(true);
     }
+    public void NoAtive()
+    {
+        hitbox.SetActive(false);
+    }
+    
 }
 

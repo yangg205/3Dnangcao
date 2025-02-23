@@ -55,15 +55,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.57512957
-        functionName: ActivateHitbox
+      - time: 0.5000856
+        functionName: SetAtive
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.8497409
-        functionName: DeactivateHitbox
+      - time: 0.73591554
+        functionName: NoAtive
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
