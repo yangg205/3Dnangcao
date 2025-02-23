@@ -7,8 +7,8 @@ public class PickupWeapons : MonoBehaviour
         Debug.Log("Triggered by: " + other.name);
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Player gần vũ khí!");
-            GameManager.instance.SetNearbyWeapon(gameObject);
+            Debug.Log("Player gần vật phẩm!");
+            GameManager.instance.SetNearbyItem(gameObject); // Đổi từ SetNearbyWeapon thành SetNearbyItem
         }
     }
 
@@ -16,7 +16,7 @@ public class PickupWeapons : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            GameManager.instance.ClearNearbyWeapon(gameObject);
+            GameManager.instance.ClearNearbyItem(gameObject); // Đổi từ ClearNearbyWeapon thành ClearNearbyItem
         }
     }
 }

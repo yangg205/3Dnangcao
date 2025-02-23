@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     private GameObject nearbyWeapon;
 
     public WeaponType[] weaponTypes; // Danh mục từng vũ khí
+    private int healthPackCount = 0; // Số lượng vật phẩm hồi máu
+    public TextMeshProUGUI healthPackText; // UI hiển thị số lượng
 
     void Start()
     {
@@ -59,22 +61,22 @@ public class GameManager : MonoBehaviour
         highScoreText.text = highScore.ToString();
         currentScoreText.text = currentScore.ToString();
 
-        // Chuyển đổi vũ khí theo nhóm
         if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchWeaponByType(WeaponType.Rifle);
         if (Input.GetKeyDown(KeyCode.Alpha2)) SwitchWeaponByType(WeaponType.Pistol);
         if (Input.GetKeyDown(KeyCode.Alpha3)) SwitchWeaponByType(WeaponType.Melee);
+        if (Input.GetKeyDown(KeyCode.Alpha4)) SwitchWeaponByType(WeaponType.Medkit); // Chuyển sang Medkit
 
-        // Nếu có vũ khí gần đó và nhấn E -> Nhặt
-        if (nearbyWeapon != null && Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && nearbyWeapon != null)
         {
-            PickUpWeapon(nearbyWeapon);
+            PickUpItem(nearbyWeapon);
         }
     }
     public enum WeaponType
     {
         Rifle,   // Súng trường
         Pistol,  // Súng lục
-        Melee    // Cận chiến
+        Melee,   // Cận chiến
+        Medkit   // Túi cứu thương
     }
 
     void SwitchWeaponByType(WeaponType type)
@@ -95,6 +97,7 @@ public class GameManager : MonoBehaviour
 
     void SwitchWeapon(int newIndex)
     {
+        weaponIcon.sprite = weaponIcons[newIndex]; // Cập nhật icon vũ khí/Medkit
         if (unlockedWeapons[newIndex] && newIndex != currentWeaponIndex)
         {
             weapons[currentWeaponIndex].SetActive(false);
@@ -159,21 +162,118 @@ public class GameManager : MonoBehaviour
         nearbyWeapon = null;
         pickupText.gameObject.SetActive(false);
     }
-
-    public void SetNearbyWeapon(GameObject weapon)
+    void PickUpItem(GameObject item)
     {
-        nearbyWeapon = weapon;
-        string weaponName = weapon.name.Replace("(Clone)", "").Trim();
-        pickupText.text = $"Nhấn [E] để nhặt {weaponName}";
+        string itemName = item.name.Replace("(Clone)", "").Trim();
+
+        if (itemName == "Medkit")
+        {
+            PickUpHealthPack(); // Gọi đúng chức năng để tăng số lượng Medkit
+            Destroy(item);
+            pickupText.gameObject.SetActive(false);
+            return;
+        }
+
+        PickUpWeapon(item);
+    }
+    public void PickUpMedkit(GameObject medkit)
+    {
+        int medkitIndex = -1;
+
+        for (int i = 0; i < weapons.Length; i++)
+        {
+            if (weaponTypes[i] == WeaponType.Medkit)
+            {
+                medkitIndex = i;
+                break;
+            }
+        }
+
+        if (medkitIndex == -1)
+        {
+            Debug.LogError("Không tìm thấy Medkit trong danh sách weapons[].");
+            return;
+        }
+
+        equippedWeaponIndices[WeaponType.Medkit] = medkitIndex;
+        unlockedWeapons[medkitIndex] = true;
+
+        // Chuyển sang cầm Medkit
+        SwitchWeapon(medkitIndex);
+
+        Debug.Log("Nhặt Medkit!");
+        Destroy(medkit);
+    }
+    void UseMedkit()
+    {
+        if (healthPackCount > 0 && PlayerMovement.instance.currentHealth < PlayerMovement.instance.maxHealth)
+        {
+            PlayerMovement.instance.Heal(20);
+            healthPackCount--;
+
+            if (healthPackCount == 0)
+            {
+                Debug.Log("Hết Medkit! Tự động chuyển về vũ khí cận chiến.");
+                SwitchWeaponByType(WeaponType.Melee);
+            }
+
+            UpdateHealthPackUI();
+        }
+        else
+        {
+            Debug.Log("Không thể sử dụng Medkit!");
+        }
+    }
+
+    public void SetNearbyItem(GameObject item)
+    {
+        nearbyWeapon = item;
+        string itemName = item.name.Replace("(Clone)", "").Trim();
+
+        if (itemName == "Medkit")
+        {
+            pickupText.text = $"Nhấn [E] để nhặt vật phẩm hồi máu";
+        }
+        else
+        {
+            pickupText.text = $"Nhấn [E] để nhặt {itemName}";
+        }
+
         pickupText.gameObject.SetActive(true);
     }
 
-    public void ClearNearbyWeapon(GameObject weapon)
+    public void ClearNearbyItem(GameObject item)
     {
-        if (nearbyWeapon == weapon)
+        if (nearbyWeapon == item)
         {
             nearbyWeapon = null;
             pickupText.gameObject.SetActive(false);
+        }
+    }
+    void UpdateHealthPackUI()
+    {
+        healthPackText.text = $"{healthPackCount}";
+    }
+    public void PickUpHealthPack()
+    {
+        healthPackCount++;
+        UpdateHealthPackUI();
+        pickupText.gameObject.SetActive(false); // Ẩn UI sau khi nhặt
+        Debug.Log("Nhặt vật phẩm hồi máu!");
+    }
+    public void UseHealthPack()
+    {
+        if (healthPackCount > 0 && PlayerMovement.instance.currentHealth < PlayerMovement.instance.maxHealth)
+        {
+            int healAmount = Mathf.Min(20, PlayerMovement.instance.maxHealth - PlayerMovement.instance.currentHealth);
+            PlayerMovement.instance.Heal(healAmount);
+            healthPackCount--;
+            UpdateHealthPackUI();
+            Debug.Log($"Đã sử dụng vật phẩm hồi máu! Hồi {healAmount} máu.");
+        }
+        else
+        {
+            Debug.Log("Không thể sử dụng vật phẩm hồi máu!");
         }
     }
 }

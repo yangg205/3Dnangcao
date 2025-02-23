@@ -1,10 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
     //Player Health
-    private int maxHealth = 100;
+    public int maxHealth = 100;
     public int currentHealth;
     public Slider healthSlider;
 
@@ -26,6 +26,11 @@ public class PlayerMovement : MonoBehaviour
     public float groundDistance = 0.4f;
     private bool isGrounded;
     private Vector3 velocity;
+    public static PlayerMovement instance; // Thêm biến instance
+    private void Awake()
+    {
+        instance = this; // Đảm bảo instance được khởi tạo khi game chạy
+    }
     void Start()
     {
         currentHealth = maxHealth;
@@ -50,6 +55,10 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = Mathf.Sqrt(jumpForce - 2 * gravity);
         }
         controller.Move(velocity * Time.deltaTime);
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+    {
+        GameManager.instance.UseHealthPack();
+    }
     }
     void HandleMovement()
     {
@@ -78,5 +87,11 @@ public class PlayerMovement : MonoBehaviour
     {
         deathScreen.showDeadScreen = true;
         Debug.Log("You die");
+    }
+    public void Heal(int healAmount)
+    {
+        currentHealth = Mathf.Min(currentHealth + healAmount, maxHealth);
+        healthSlider.value = currentHealth;
+        Debug.Log($"Hồi {healAmount} máu! Máu hiện tại: {currentHealth}/{maxHealth}");
     }
 }
