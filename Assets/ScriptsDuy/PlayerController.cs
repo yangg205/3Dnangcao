@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Windows;
 public class PlayerController : MonoBehaviour
 {
@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     public float footStepInterval = 0.5f;
     private float nextFootStepTime;
     private bool isLeftFootStep = true;
-
+    private object healthPotionAmount;
 
     void Start()
     {
@@ -78,5 +78,48 @@ public class PlayerController : MonoBehaviour
             rightFootAudioSource.PlayOneShot(footStepClip);
         }
         isLeftFootStep = !isLeftFootStep;
+    }
+
+
+public class PlayerHealth : MonoBehaviour
+{
+    public float health = 100f;  // Máu của nhân vật
+    public float maxHealth = 100f;  // Máu tối đa
+    public float healthPotionAmount = 20f;  // Số máu hồi khi nhặt thuốc
+
+    // Cập nhật máu khi nhân vật va chạm với vật phẩm
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("HealthPotion"))  // Kiểm tra xem vật phẩm có phải là thuốc máu không
+        {
+            Heal(healthPotionAmount);  // Tăng máu
+            Destroy(other.gameObject);  // Xóa vật phẩm khỏi hiện trường
+        }
+    }
+
+    // Phương thức để hồi máu
+    void Heal(float amount)
+    {
+        health += amount;
+        if (health > maxHealth)  // Nếu máu vượt quá mức tối đa, giới hạn nó ở mức tối đa
+        {
+            health = maxHealth;
+        }
+        Debug.Log("Current Health: " + health);
+    }
+}
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Collided with: " + other.name);  // Kiểm tra xem vật phẩm có va chạm với nhân vật không
+        if (other.CompareTag("HealthPotion"))
+        {
+            Heal(healthPotionAmount);
+            Destroy(other.gameObject);
+        }
+    }
+
+    private void Heal(object healthPotionAmount)
+    {
+        throw new System.NotImplementedException();
     }
 }
