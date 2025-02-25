@@ -1,16 +1,8 @@
 fileFormatVersion: 2
-guid: f5bf3a9dcdeaaa24a9ee2dcb25088166
+guid: 6744607dbd2f91547aca67cdc8557cb0
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 170036
-  packageName: Environmental Asset Pack
-  packageVersion: 1.0
-  assetPath: Assets/JP Environmental Asset Pack/Materials/Small Rock 4/Small Rock
-    4.mat
-  uploadId: 371416

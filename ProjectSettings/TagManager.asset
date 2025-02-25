@@ -3,20 +3,19 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags:
-  - terrain
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Post-Processing
   - Water
   - UI
-  - PLayer
-  - vatpham
   - Ground
+  - Player
+  - Number
   - 
-  - whatIsRound
+  - 
   - 
   - 
   - 

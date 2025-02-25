@@ -1,16 +1,8 @@
 fileFormatVersion: 2
-guid: 442fa6ed07e500444a0961b0930713a8
+guid: efde0d8abf716154ea89c1f0e4b6c104
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 170036
-  packageName: Environmental Asset Pack
-  packageVersion: 1.0
-  assetPath: Assets/JP Environmental Asset Pack/Materials/Small Rock 4 Moss/Small
-    Rock 4 Moss.mat
-  uploadId: 371416

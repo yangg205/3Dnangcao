@@ -23,44 +23,49 @@ public class Rank : MonoBehaviour
     }
     IEnumerator Gettop10()
     {
-        var url = $"http://yang2206-001-site1.ptempurl.com/api/TopPlayer";
-        var request = new UnityWebRequest(url,"GET");
-        request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+        var url = "http://yang2206-001-site1.ptempurl.com/api/TopPlayer";
+        using (UnityWebRequest request = UnityWebRequest.Get(url))
+        {
+            // Thêm header Basic Auth
+            string username = "11212993";
+            string password = "60-dayfreetrial";
+            string encodedAuth = System.Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes($"{username}:{password}"));
+            request.SetRequestHeader("Authorization", $"Basic {encodedAuth}");
 
-        //basic auth
-        string username = "11212993";
-        string password = "60-dayfreetrial";
-        string encodedAuth = System.Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes($"{username}:{password}"));
-        request.SetRequestHeader("Authorization", $"Basic {encodedAuth}");
-        yield return request.SendWebRequest();
-        if (request.result == UnityWebRequest.Result.ConnectionError ||
-            request.result == UnityWebRequest.Result.ProtocolError)
-        {
-            Debug.Log(request.error);
-        }
-        else
-        {
-            var text = request.downloadHandler.text;
-            //chuyen tu text sang obj
-            var model = JsonUtility.FromJson<Top10>(text);
-            if (model.status)
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
-                var data = model.data;
-                string bxh = "";
-                int rank = 1;
-                foreach (var x in data)
-                {
-                    bxh += $"{rank}. {x.ToString()}\n";
-                    rank++;
-                }
-                top.text = bxh;
-                Debug.Log(bxh);
+                Debug.LogError($"Lỗi kết nối: {request.error}");
             }
             else
             {
-                Debug.Log("Status is false");
+                var responseText = request.downloadHandler.text;
+                Debug.Log($"Phản hồi từ server: {responseText}");
+
+                // Chuyển JSON thành đối tượng Top10Response
+                var response = JsonUtility.FromJson<Top10Response>(responseText);
+
+                if (response != null && response.data != null)
+                {
+                    // Hiển thị danh sách BXH
+                    string bxh = "";
+                    int rank = 1;
+
+                    foreach (var player in response.data)
+                    {
+                        bxh += $"{rank}. {player}\n";
+                        rank++;
+                    }
+
+                    top.text = bxh; // Cập nhật text trong UI
+                    Debug.Log($"BXH:\n{bxh}");
+                }
+                else
+                {
+                    Debug.LogError("Phản hồi không hợp lệ hoặc không có dữ liệu BXH.");
+                }
             }
         }
-
     }
 }

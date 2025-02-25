@@ -1,16 +1,8 @@
 fileFormatVersion: 2
-guid: dba1b385d51554b4f9372291b6d45c00
+guid: 490ea5e56e95085408fa4027f186944f
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 170036
-  packageName: Environmental Asset Pack
-  packageVersion: 1.0
-  assetPath: Assets/JP Environmental Asset Pack/Materials/Ground Materials/Rock Floor
-    1.mat
-  uploadId: 371416
