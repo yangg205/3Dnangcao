@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using TMPro;
+using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
@@ -7,7 +11,8 @@ public class PlayerMovement : MonoBehaviour
     public int maxHealth = 100;
     public int currentHealth;
     public Slider healthSlider;
-
+    public TextMeshProUGUI point;
+    int _point;
     public DeathScreen deathScreen;
     
     //Slider Health
@@ -41,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
+        //Debug.Log(GameManager.instance.currentScore);
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         if (isGrounded && velocity.y < 0)
         {
@@ -86,7 +92,58 @@ public class PlayerMovement : MonoBehaviour
     private void Die()
     {
         deathScreen.showDeadScreen = true;
-        Debug.Log("You die");
+        Debug.Log("You died");
+
+        // Gửi điểm lên server khi chết
+        string email = PlayerPrefs.GetString("email"); // Lấy email đã lưu
+        int totalPoint = GameManager.instance.currentScore; // Điểm hiện tại của người chơi
+        Debug.Log($"Điểm gửi lên server: {totalPoint}");
+        StartCoroutine(UpdatePointToServer(email, totalPoint));
+        // Quay lại Scene "Map 1" sau khi gửi điểm (đợi một chút để đảm bảo gửi xong)
+        StartCoroutine(LoadSceneWithDelay("Map 1", 3f));
+    }
+
+    IEnumerator UpdatePointToServer(string email, int totalPoint)
+    {
+        string apiUrl = "http://yang2206-001-site1.ptempurl.com/api/updatepoint";
+        string json = $"{{\"email\":\"{email}\",\"total_point\":{totalPoint}}}";
+
+        using (UnityWebRequest request = new UnityWebRequest(apiUrl, "POST"))
+        {
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+
+            string username = "11212993";
+            string password = "60-dayfreetrial";
+            string encodedAuth = System.Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes($"{username}:{password}"));
+
+            request.SetRequestHeader("Authorization", $"Basic {encodedAuth}");
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            Debug.Log($"Sending POST request to {apiUrl} with body: {json}");
+
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError($"Error updating points: {request.error}");
+                Debug.LogError($"Response from server: {request.downloadHandler.text}");
+            }
+            else
+            {
+                Debug.Log($"Server response: {request.downloadHandler.text}");
+            }
+        }
+    }
+    IEnumerator LoadSceneWithDelay(string sceneName, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        // Reset trạng thái chuột và load Scene
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     }
     public void Heal(int healAmount)
     {
