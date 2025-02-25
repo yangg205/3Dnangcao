@@ -7,8 +7,8 @@ public class BoomerAi : MonoBehaviour
 {   
     
     
-    public float knockbackForce = 500f;
-    
+    public AudioClip[] Exp;
+    public GameObject soundPrefab;
     public CapsuleCollider collider;
     waveSpaner spawner;
     public GameObject explosionEffectPrefab; 
@@ -118,6 +118,16 @@ public class BoomerAi : MonoBehaviour
             
             Destroy(explosionEffect, 2f);  
         }
+         if (soundPrefab != null)
+        {
+            GameObject sound = Instantiate(soundPrefab, transform.position, Quaternion.identity);
+            AudioSource audioSource = sound.GetComponent<AudioSource>();
+            if (audioSource != null)
+            {
+                audioSource.PlayOneShot(Exp[UnityEngine.Random.Range(0,Exp.Length)]); // Phát âm thanh
+            }
+            Destroy(sound, Exp.Length);  // Hủy âm thanh sau khi phát xong
+        }
     }
     public void setSpawner(waveSpaner _spawner)
     {
@@ -137,12 +147,7 @@ public class BoomerAi : MonoBehaviour
                         {
                             hp.TakeDamage(10);
                         }
-                        Rigidbody rb = Playerr.GetComponent<Rigidbody>();
-                        if(rb != null)
-                        {
-                             Vector3 knockbackDir = (player.transform.position - transform.position).normalized;
-                            rb.AddForce(knockbackDir * knockbackForce);
-                        }
+                       
                     }
                 }
                 Destroy(gameObject);
