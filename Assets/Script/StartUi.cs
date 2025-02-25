@@ -23,6 +23,10 @@ public class StartUi : MonoBehaviour
         // Gọi API reset điểm
         StartCoroutine(ResetPointAndStartGame(email));
     }
+    public void Exit()
+    {
+        Application.Quit();
+    }
 
 
     IEnumerator ResetPointAndStartGame(string email)
