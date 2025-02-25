@@ -9,6 +9,7 @@ public class Hp : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        Debug.Log(damage);
         health -= damage;
         if (health <= 0)
         {
@@ -27,39 +28,9 @@ private CharacterController characterController;    public Rigidbody rb;
     
     void Start()
     {
-        characterController = GetComponent<CharacterController>();
-        rb = GetComponent<Rigidbody>();
+
     }
 
-void Update()
-    {
-        if (knockbackTimer > 0)
-        {
-            characterController.Move(knockbackDirection * knockbackForce * Time.deltaTime);
-            knockbackTimer -= Time.deltaTime;
-        }
-    }
-    public void ApplyKnockback(Vector3 sourcePosition)
-    {
-        if (!isKnockedBack)
-        {
-            isKnockedBack = true;
 
-            // Tính hướng knockback (từ nguồn tấn công về phía người chơi)
-            Vector3 knockbackDirection = (transform.position - sourcePosition).normalized;
-            knockbackDirection.y = 2; // Giữ nhân vật không bị đẩy lên trời
-
-            // Áp dụng lực knockback
-            rb.AddForce(knockbackDirection * knockbackForce, ForceMode.Impulse);
-
-            // Hủy knockback sau một thời gian
-            Invoke(nameof(ResetKnockback), knockbackDuration);
-        }
-    }
-
-    void ResetKnockback()
-    {
-        isKnockedBack = false;
-    }
 }
 

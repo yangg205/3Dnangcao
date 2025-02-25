@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 
 public class ZombieAi : MonoBehaviour
 {
-
+    public GameObject hitbox;
     public float DissolveRate = 0.00125f;
     public float refreshRate = 0.0025f;
     public SkinnedMeshRenderer SkinnedMesh;
@@ -117,9 +117,9 @@ public class ZombieAi : MonoBehaviour
     private IEnumerator AttackWithdelay()
     {
         isAttacking = true;
-
+        SetAtive();
         yield return new WaitForSeconds(AttackDelay);
-
+        NoAtive();
         isAttacking = false;
         lastAttackTime = Time.time;
     }
@@ -196,6 +196,14 @@ public class ZombieAi : MonoBehaviour
                 skinnedMaterrials[i].SetFloat("_DissolveAmount", 1);
             }
         }
+    }
+    public void SetAtive()
+    {
+        hitbox.SetActive(true);
+    }
+    public void NoAtive()
+    {
+        hitbox.SetActive(false);
     }
 }
 

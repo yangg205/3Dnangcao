@@ -6,10 +6,16 @@ using System;
 using Unity.VisualScripting;
 using CodeMonkey.HealthSystemCM;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 
 public class TankAI : MonoBehaviour
 {
+    public AudioClip[] SoundDeath;
+    public AudioClip[] Soundattack;
+    
+    public AudioClip[] Soundhurt;
+    public AudioSource audioSource;
     public GameObject hitbox;
     public float DissolveRate = 0.00125f;
     public float refreshRate = 0.0025f;
@@ -41,6 +47,7 @@ public class TankAI : MonoBehaviour
     private float lastAttackTime;
     void Start()
     {   
+        audioSource = GetComponent<AudioSource>();
         collider = GetComponentInChildren<CapsuleCollider>();
         currentHp = MaxHp;
         gameObject.name = "Type:" + name;
@@ -62,7 +69,6 @@ public class TankAI : MonoBehaviour
     {
         switch (currentState)
         {
-            
             case ZombieState.Chase:
                 animator.SetBool("IsWalking", true);
                 animator.SetBool("IsAttacking", false);
@@ -75,10 +81,11 @@ public class TankAI : MonoBehaviour
                 break;
             case ZombieState.Attack:
                 //Animations
+                
                 animator.SetBool("IsWalking", false);
                 animator.SetBool("IsAttacking", true);
                 Nav.SetDestination(transform.position);
-                transform.LookAt(player);
+              //  transform.LookAt(player);
                 if (!isAttacking && Time.time - lastAttackTime >= AttackCooldown)
                 {
                     StartCoroutine(AttackWithdelay());
@@ -94,6 +101,7 @@ public class TankAI : MonoBehaviour
             case ZombieState.Dead:
             Nav.SetDestination(transform.position);
                 StartCoroutine(RadollDie());
+             
               
                 break;
         }
@@ -113,8 +121,13 @@ public class TankAI : MonoBehaviour
 
         if (currentState == ZombieState.Dead)
         {
+            
             Debug.Log("die");
             return;
+        }
+        if(UnityEngine.Random.Range(0, 100) > 50)
+        {
+        audioSource.PlayOneShot(Soundhurt[UnityEngine.Random.Range(0, Soundhurt.Length)]);
         }
         currentHp -= damageAmount;
         Debug.Log(currentHp);
@@ -122,10 +135,13 @@ public class TankAI : MonoBehaviour
         {
             currentHp = 0;
             currentState = ZombieState.Dead;
+            audioSource.PlayOneShot(SoundDeath[UnityEngine.Random.Range(0, SoundDeath.Length)]);
         }
     }
     private IEnumerator RadollDie()
     {
+
+        
         animator.enabled = false;
         collider.enabled = false;
         foreach (Collider Co in gameObject.GetComponentsInChildren<Collider>())
@@ -157,6 +173,7 @@ public class TankAI : MonoBehaviour
     }
     public void SetAtive()
     {
+        audioSource.PlayOneShot(Soundattack[UnityEngine.Random.Range(0, Soundattack.Length)]);
         hitbox.SetActive(true);
     }
     public void NoAtive()

@@ -4,7 +4,9 @@ using System.Collections;
 using Unity.Mathematics;
 
 public class BoomerAi : MonoBehaviour
-{
+{   
+    
+    
     public float knockbackForce = 500f;
     
     public CapsuleCollider collider;
@@ -71,12 +73,14 @@ public class BoomerAi : MonoBehaviour
                 // Handle explosion
                 Collider[] boom = Physics.OverlapSphere(transform.position, explosionRadius, LayerPlayer);
                 HandleExplosionEffect();
+                //audioSource.PlayOneShot(audioClip);
                 if (boom != null && boom.Length > 0)
                 {
                     for (int i = 0; i < boom.Length; i++)
                     {
                         
-                       
+                       Hp game = GetComponent<Hp>();
+
                     }
                 }
 
@@ -100,7 +104,6 @@ public class BoomerAi : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, explosionRadius);
         Gizmos.DrawWireSphere(transform.position, AttackDistance); // Show explosion radius in the editor
@@ -111,7 +114,7 @@ public class BoomerAi : MonoBehaviour
         {
             // Instantiate the explosion effect at the zombie's position
             GameObject explosionEffect = Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
-
+           
             
             Destroy(explosionEffect, 2f);  
         }
