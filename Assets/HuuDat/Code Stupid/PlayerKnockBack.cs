@@ -28,7 +28,7 @@ public class PlayerKnockBack : MonoBehaviour
     public void ApplyKnockback(Vector3 sourcePosition, float force)
     {
         knockbackDirection = (transform.position - sourcePosition).normalized;
-        knockbackDirection.y = 0.25f; // Không đẩy lên trời
+        knockbackDirection.y = 0.5f; // Không đẩy lên trời
         knockbackForce = force;
         knockbackTimer = knockbackDuration;
     }

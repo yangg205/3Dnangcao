@@ -84,7 +84,7 @@ public class TankAI : MonoBehaviour
                 
                 animator.SetBool("IsWalking", false);
                 animator.SetBool("IsAttacking", true);
-                Nav.SetDestination(transform.position);
+                Nav.SetDestination(player.position);
               //  transform.LookAt(player);
                 if (!isAttacking && Time.time - lastAttackTime >= AttackCooldown)
                 {
