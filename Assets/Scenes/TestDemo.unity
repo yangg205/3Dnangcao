@@ -4357,6 +4357,10 @@ MonoBehaviour:
   muzzleFlash: {fileID: 1017819684}
   bloodEffect: {fileID: 198000011254678926, guid: abb9f519b142e304d9c45b56afa768bc, type: 3}
   damagePerShot: 10
+  soundAudioSource: {fileID: 1950660944}
+  shootingSoundClip: {fileID: 8300000, guid: a48b50871e0f63140a71ff08b3520d33, type: 3}
+  reloadSoundClip: {fileID: 8300000, guid: d8ef754a8027e6a428252cc758d960ce, type: 3}
+  pickUpSoundClip: {fileID: 8300000, guid: 991c7a5f44cc5ac47bcaaa71bd4acb5d, type: 3}
   currentAmmoText: {fileID: 515697251}
   totalAmmoText: {fileID: 578722855}
 --- !u!95 &416840262
@@ -19002,6 +19006,7 @@ GameObject:
   - component: {fileID: 1950660942}
   - component: {fileID: 1950660941}
   - component: {fileID: 1950660943}
+  - component: {fileID: 1950660944}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -19084,6 +19089,103 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   groundDistance: 0.4
+--- !u!82 &1950660944
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950660940}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1964956431
 GameObject:
   m_ObjectHideFlags: 0
@@ -22370,6 +22472,10 @@ MonoBehaviour:
   muzzleFlash: {fileID: 418505030}
   bloodEffect: {fileID: 198000011254678926, guid: abb9f519b142e304d9c45b56afa768bc, type: 3}
   damagePerShot: 10
+  soundAudioSource: {fileID: 1950660944}
+  shootingSoundClip: {fileID: 8300000, guid: 84ba3d9375cf8b848b65054bf25bd1c8, type: 3}
+  reloadSoundClip: {fileID: 8300000, guid: bb14e30b85faf864e89f381f8f17c13a, type: 3}
+  pickUpSoundClip: {fileID: 8300000, guid: 991c7a5f44cc5ac47bcaaa71bd4acb5d, type: 3}
   currentAmmoText: {fileID: 515697251}
   totalAmmoText: {fileID: 578722855}
 --- !u!1 &919132148794018226
@@ -22412,7 +22518,11 @@ MonoBehaviour:
   reloadTime: 5
   muzzleFlash: {fileID: 52972608}
   bloodEffect: {fileID: 198000011254678926, guid: abb9f519b142e304d9c45b56afa768bc, type: 3}
-  damagePerShot: 10
+  damagePerShot: 100
+  soundAudioSource: {fileID: 1950660944}
+  shootingSoundClip: {fileID: 8300000, guid: 6c3af9c505d51eb49a50ad7bd76b3e3a, type: 3}
+  reloadSoundClip: {fileID: 8300000, guid: 14968d03f12fe6c44a037e3b963d3bee, type: 3}
+  pickUpSoundClip: {fileID: 8300000, guid: 991c7a5f44cc5ac47bcaaa71bd4acb5d, type: 3}
   currentAmmoText: {fileID: 515697251}
   totalAmmoText: {fileID: 578722855}
 --- !u!1 &919132148958609947
@@ -22456,6 +22566,10 @@ MonoBehaviour:
   muzzleFlash: {fileID: 1148901164}
   bloodEffect: {fileID: 198000011254678926, guid: abb9f519b142e304d9c45b56afa768bc, type: 3}
   damagePerShot: 10
+  soundAudioSource: {fileID: 1950660944}
+  shootingSoundClip: {fileID: 8300000, guid: bb56c4cec766b2840be68e92c1b65873, type: 3}
+  reloadSoundClip: {fileID: 8300000, guid: a818a9989349e804e8f67b9eef2308aa, type: 3}
+  pickUpSoundClip: {fileID: 8300000, guid: 991c7a5f44cc5ac47bcaaa71bd4acb5d, type: 3}
   currentAmmoText: {fileID: 515697251}
   totalAmmoText: {fileID: 578722855}
 --- !u!33 &922539930913403965
@@ -29703,6 +29817,8 @@ MonoBehaviour:
   attackPoint: {fileID: 839889360}
   attackRate: 1
   attackRange: 1.5
+  soundAudioSource: {fileID: 1950660944}
+  attackSoundClip: {fileID: 8300000, guid: 32b033221cbe0c34cab9eb7c251bb9b9, type: 3}
   damagePerHit: 100
   hitEffect: {fileID: 198000011254678926, guid: abb9f519b142e304d9c45b56afa768bc, type: 3}
 --- !u!95 &5359334055627475892
@@ -31761,6 +31877,10 @@ MonoBehaviour:
   muzzleFlash: {fileID: 1505667907}
   bloodEffect: {fileID: 198000011254678926, guid: abb9f519b142e304d9c45b56afa768bc, type: 3}
   damagePerShot: 100
+  soundAudioSource: {fileID: 1950660944}
+  shootingSoundClip: {fileID: 8300000, guid: b35406e95b0a43c4c830b474ca6f3b07, type: 3}
+  reloadSoundClip: {fileID: 8300000, guid: b958b8173dac87a4c9cc5dec6fd5c1b7, type: 3}
+  pickUpSoundClip: {fileID: 8300000, guid: 991c7a5f44cc5ac47bcaaa71bd4acb5d, type: 3}
   currentAmmoText: {fileID: 515697251}
   totalAmmoText: {fileID: 578722855}
 --- !u!114 &6888026120642085909
@@ -33533,6 +33653,10 @@ MonoBehaviour:
   muzzleFlash: {fileID: 1317198873}
   bloodEffect: {fileID: 198000011254678926, guid: abb9f519b142e304d9c45b56afa768bc, type: 3}
   damagePerShot: 10
+  soundAudioSource: {fileID: 1950660944}
+  shootingSoundClip: {fileID: 8300000, guid: 4400de2bca587734ba824d05f1112af7, type: 3}
+  reloadSoundClip: {fileID: 8300000, guid: c729850a8b6920840b8cab3d392b1de1, type: 3}
+  pickUpSoundClip: {fileID: 8300000, guid: 991c7a5f44cc5ac47bcaaa71bd4acb5d, type: 3}
   currentAmmoText: {fileID: 515697251}
   totalAmmoText: {fileID: 578722855}
 --- !u!33 &7974988284089662588

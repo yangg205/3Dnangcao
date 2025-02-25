@@ -22,6 +22,10 @@ public class ShootingController : MonoBehaviour
     public ParticleSystem muzzleFlash;
     public ParticleSystem bloodEffect;
     public int damagePerShot = 10;
+    public AudioSource soundAudioSource;
+    public AudioClip shootingSoundClip;
+    public AudioClip reloadSoundClip;
+    public AudioClip pickUpSoundClip;
 
     public TextMeshProUGUI currentAmmoText;
     public TextMeshProUGUI totalAmmoText;
@@ -98,6 +102,7 @@ public class ShootingController : MonoBehaviour
             muzzleFlash.Play();
             animator.SetBool("Shoot", true);
             currentAmmo--;
+            soundAudioSource.PlayOneShot(shootingSoundClip);
             UpdateAmmoUI();
         }
         else
@@ -112,6 +117,7 @@ public class ShootingController : MonoBehaviour
         {
             animator.SetTrigger("Reload");
             isReloading = true;
+            soundAudioSource.PlayOneShot(reloadSoundClip);
             Invoke("FinishReloading", reloadTime);
         }
     }
@@ -138,7 +144,7 @@ public class ShootingController : MonoBehaviour
     public void PickupAmmo(int ammoAmount)
     {
         Debug.Log("Số đạn sau khi nhặt: " + totalAmmo); // Kiểm tra số đạn sau khi nhặt
-
+        soundAudioSource.PlayOneShot(pickUpSoundClip);
         totalAmmo += ammoAmount;
         UpdateAmmoUI();
     }

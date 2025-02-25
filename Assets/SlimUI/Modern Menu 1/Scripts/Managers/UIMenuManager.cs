@@ -120,11 +120,13 @@ namespace SlimUI.ModernMenu{
 			}
 		}
 
-		public void PlayCampaign(){
-			exitMenu.SetActive(false);
-			if(extrasMenu) extrasMenu.SetActive(false);
-			playMenu.SetActive(true);
-		}
+        public void PlayCampaign()
+        {
+            exitMenu.SetActive(false);
+            if (extrasMenu) extrasMenu.SetActive(false);
+            if (leaderboardMenu) leaderboardMenu.SetActive(false); // Tắt leaderboard khi mở maps
+            playMenu.SetActive(true);
+        }
 		
 		public void PlayCampaignMobile(){
 			exitMenu.SetActive(false);
@@ -136,7 +138,8 @@ namespace SlimUI.ModernMenu{
 		public void ReturnMenu(){
 			playMenu.SetActive(false);
 			if(extrasMenu) extrasMenu.SetActive(false);
-			exitMenu.SetActive(false);
+            if (leaderboardMenu) leaderboardMenu.SetActive(false);
+            exitMenu.SetActive(false);
 			mainMenu.SetActive(true);
 		}
 
@@ -250,15 +253,18 @@ namespace SlimUI.ModernMenu{
 			DisablePlayCampaign();
 		}
 
-		public void ExtrasMenu(){
-			playMenu.SetActive(false);
-			if(extrasMenu) extrasMenu.SetActive(true);
-			exitMenu.SetActive(false);
-		}
+        public void ExtrasMenu()
+        {
+            playMenu.SetActive(false);
+            if (extrasMenu) extrasMenu.SetActive(true);
+            if (leaderboardMenu) leaderboardMenu.SetActive(false); // Tắt leaderboard khi mở maps
+            exitMenu.SetActive(false);
+        }
 		public void LeaderboardMenu()
 		{
             playMenu.SetActive(false);
             if (leaderboardMenu) leaderboardMenu.SetActive(true);
+            if (extrasMenu) extrasMenu.SetActive(false); // Tắt menu maps (extrasMenu) khi mở leaderboard
             exitMenu.SetActive(false);
         }
 
