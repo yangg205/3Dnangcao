@@ -15642,7 +15642,13 @@ PrefabInstance:
       value: House_Green_Prefab
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 126482274968170053, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+    - {fileID: 2004693800611039167, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+    - {fileID: 6237512265794352033, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+    - {fileID: 8620545822770519058, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+    - {fileID: 157284601282637036, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+    - {fileID: 6064311962214073865, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
@@ -23045,7 +23051,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 10652, guid: 0000000000000000f000000000000000, type: 0}
+  m_MaterialTemplate: {fileID: 2100000, guid: 594ea882c5a793440b60ff72d896021e, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -27231,7 +27237,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec02cb24b1b648a42b1ded1a79cddc21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  light: {fileID: 425307394}
 --- !u!4 &1380514758
 Transform:
   m_ObjectHideFlags: 0
@@ -28851,7 +28856,15 @@ PrefabInstance:
       value: House_Prefab
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8442262470655759374, guid: 0b26cd811d173394ea7ee69051b77c63, type: 3}
+    - {fileID: 8015193932776963572, guid: 0b26cd811d173394ea7ee69051b77c63, type: 3}
+    - {fileID: 8558919067535611559, guid: 0b26cd811d173394ea7ee69051b77c63, type: 3}
+    - {fileID: 2360283751062977600, guid: 0b26cd811d173394ea7ee69051b77c63, type: 3}
+    - {fileID: 2360283751062977606, guid: 0b26cd811d173394ea7ee69051b77c63, type: 3}
+    - {fileID: 2484212735416486378, guid: 0b26cd811d173394ea7ee69051b77c63, type: 3}
+    - {fileID: 2360283751062977610, guid: 0b26cd811d173394ea7ee69051b77c63, type: 3}
+    - {fileID: 2360283751062977604, guid: 0b26cd811d173394ea7ee69051b77c63, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b26cd811d173394ea7ee69051b77c63, type: 3}
@@ -46037,7 +46050,15 @@ PrefabInstance:
       value: House_Green_Prefab (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 126482274968170053, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+    - {fileID: 2004693800611039167, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+    - {fileID: 157284601282637036, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+    - {fileID: 6237512265794352033, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+    - {fileID: 6064311962214073867, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+    - {fileID: 6064311962214073857, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+    - {fileID: 6064311962214073871, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
+    - {fileID: 6064311962214073869, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a01ab0b4610caf489826c83f0d44b8b, type: 3}

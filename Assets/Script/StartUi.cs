@@ -70,7 +70,7 @@ public class StartUi : MonoBehaviour
                 if (isSuccess)
                 {
                     Debug.Log("Points reset successfully.");
-                    UnityEngine.SceneManagement.SceneManager.LoadScene("TestDemo");
+                    UnityEngine.SceneManagement.SceneManager.LoadScene("Map 2");
                 }
                 else
                 {

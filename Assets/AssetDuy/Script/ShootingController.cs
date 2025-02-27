@@ -9,6 +9,10 @@ public class ShootingController : MonoBehaviour
     public float fireRate = 0.1f;
     public float fireRange = 10f;
     private float nextFireTime = 0f;
+    public AudioSource soundAudioSource;
+    public AudioClip shootingAudioClip;
+    public AudioClip reloadAudioClip;
+    //public AudioClip drawAudioClip;
 
     // Gun Mode
     public bool isAuto = false;
@@ -28,6 +32,7 @@ public class ShootingController : MonoBehaviour
 
     void Start()
     {
+        //soundAudioSource.PlayOneShot(drawAudioClip);
         currentAmmo = maxAmmo;
         UpdateAmmoUI();
     }
@@ -94,6 +99,7 @@ public class ShootingController : MonoBehaviour
                     Destroy(blood.gameObject, blood.main.duration);
                 }
             }
+            soundAudioSource.PlayOneShot(shootingAudioClip);
 
             muzzleFlash.Play();
             animator.SetBool("Shoot", true);
@@ -113,6 +119,7 @@ public class ShootingController : MonoBehaviour
             animator.SetTrigger("Reload");
             isReloading = true;
             Invoke("FinishReloading", reloadTime);
+            soundAudioSource.PlayOneShot(reloadAudioClip);
         }
     }
 

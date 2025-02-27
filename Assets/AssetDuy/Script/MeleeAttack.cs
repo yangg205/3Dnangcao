@@ -8,6 +8,8 @@ public class MeleeAttack : MonoBehaviour
     public float attackRate = 1f; // Tốc độ đánh
     public float attackRange = 1.5f; // Phạm vi đánh
     private float nextAttackTime = 0f;
+    public AudioSource soundAudioSource;
+    public AudioClip attackAudioClip;
 
     // Sát thương
     public int damagePerHit = 25;
@@ -33,6 +35,7 @@ public class MeleeAttack : MonoBehaviour
 
     private void Attack()
     {
+        soundAudioSource.PlayOneShot(attackAudioClip);
         animator.SetBool("Attack", true);
 
         RaycastHit hit;
