@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
     public Sprite[] weaponIcons; // Mảng chứa icon của từng vũ khí
     private Dictionary<WeaponType, int> equippedWeaponIndices = new Dictionary<WeaponType, int>();
     public static GameManager instance;
-    public int highScore;
     public int currentScore;
     public TextMeshProUGUI highScoreText;
     public TextMeshProUGUI currentScoreText;
@@ -54,11 +53,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (currentScore > highScore)
-        {
-            highScore = currentScore;
-        }
-        highScoreText.text = highScore.ToString();
         currentScoreText.text = currentScore.ToString();
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchWeaponByType(WeaponType.Rifle);

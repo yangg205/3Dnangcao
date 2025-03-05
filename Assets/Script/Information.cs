@@ -16,9 +16,10 @@ public class Information : MonoBehaviour
     {
         // Gắn sự kiện cho nút "Nạp tiền"
         NapTienButton.onClick.AddListener(Naptien);
-
+        
         // Lấy email từ PlayerPrefs
         string email = PlayerPrefs.GetString("email");
+        Debug.Log(email);
         if (string.IsNullOrEmpty(email))
         {
             Debug.LogError("Email chưa được lưu trong PlayerPrefs!");
@@ -64,11 +65,13 @@ public class Information : MonoBehaviour
             }
             else
             {
+
                 string responseText = request.downloadHandler.text;
                 PlayerResponse response = JsonUtility.FromJson<PlayerResponse>(responseText);
                 if (response != null && response.data != null)
                 {
-                    UpdatePlayerInfo(response.data.name, response.data.total_money);
+                    Debug.Log($"Player Name: {response.data.name}");
+                    UpdatePlayerInfo(response.data.name, response.data.total_money);    
                 }
                 else
                 {
@@ -92,9 +95,9 @@ public class Information : MonoBehaviour
         if (totalMoney != currentMoney) // Cập nhật khi số tiền thay đổi
         {
             currentMoney = totalMoney;
-            InfoText.text = $"{name} ${currentMoney}";
-            Debug.Log($"Updated player info: {name}, Money: {currentMoney}");
         }
+        InfoText.text = $"{name} ${currentMoney}";
+        Debug.Log($"Updated player info: {name}, Money: {currentMoney}");
     }
 
     public void Naptien()
