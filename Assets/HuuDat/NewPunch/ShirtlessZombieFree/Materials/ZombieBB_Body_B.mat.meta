@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 49a38981bd330114782ce961e93aba5d
+timeCreated: 1545923735
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 276762
+  packageName: FREE Shirtless Zombie
+  packageVersion: 1.0
+  assetPath: Assets/NewPunch/ShirtlessZombieFree/Materials/ZombieBB_Body_B.mat
+  uploadId: 659931

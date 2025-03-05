@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2419eb7cdb765ea4fb2f68a5c10d3fcd
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 30232
+  packageName: Zombie
+  packageVersion: Draft 1.2
+  assetPath: Assets/Zombie/Animations/Z_FallingForward.anim
+  uploadId: 334764

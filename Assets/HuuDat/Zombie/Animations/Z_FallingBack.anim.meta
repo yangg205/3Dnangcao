@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: adc0683509a4c3645926033753ff9e93
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 30232
+  packageName: Zombie
+  packageVersion: Draft 1.2
+  assetPath: Assets/Zombie/Animations/Z_FallingBack.anim
+  uploadId: 334764
