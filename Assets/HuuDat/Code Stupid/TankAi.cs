@@ -11,9 +11,9 @@ using System.Collections;
 
 public class TankAI : MonoBehaviour
 {
+    
     public AudioClip[] SoundDeath;
     public AudioClip[] Soundattack;
-    
     public AudioClip[] Soundhurt;
     public AudioSource audioSource;
     public GameObject hitbox;
@@ -30,11 +30,12 @@ public class TankAI : MonoBehaviour
     public NavMeshAgent Nav;
     public enum ZombieState
     {
+        Ilde,
         Chase,
         Attack,
         Dead
     }
-    public ZombieState currentState = ZombieState.Chase;
+    public ZombieState currentState = ZombieState.Ilde;
     public Animator animator;
     public Transform player;
     public float chaseDistance = 10f;
@@ -69,9 +70,18 @@ public class TankAI : MonoBehaviour
     {
         switch (currentState)
         {
+            case ZombieState.Ilde:
+                animator.SetBool("IsWalking", false);
+                Nav.SetDestination(transform.position);
+                if (Vector3.Distance(transform.position, player.position) <= chaseDistance)
+                {
+                    currentState = ZombieState.Chase;
+                }
+                break;
             case ZombieState.Chase:
                 animator.SetBool("IsWalking", true);
                 animator.SetBool("IsAttacking", false);
+                Nav.speed =8f;
                 //Animations
                 Nav.SetDestination(player.position);
                 if (Vector3.Distance(transform.position, player.position) <= attackRange)
@@ -81,11 +91,12 @@ public class TankAI : MonoBehaviour
                 break;
             case ZombieState.Attack:
                 //Animations
-                
+                Debug.Log("aTTACK");
+                Nav.speed =2f;
                 animator.SetBool("IsWalking", false);
                 animator.SetBool("IsAttacking", true);
-                Nav.SetDestination(player.position);
-              //  transform.LookAt(player);
+                Nav.SetDestination(transform.position);
+                //transform.LookAt(player);
                 if (!isAttacking && Time.time - lastAttackTime >= AttackCooldown)
                 {
                     StartCoroutine(AttackWithdelay());
@@ -101,8 +112,6 @@ public class TankAI : MonoBehaviour
             case ZombieState.Dead:
             Nav.SetDestination(transform.position);
                 StartCoroutine(RadollDie());
-             
-              
                 break;
         }
     }
@@ -161,7 +170,6 @@ public class TankAI : MonoBehaviour
         foreach (Collider Co in gameObject.GetComponentsInChildren<Collider>())
         {
             Co.enabled = false;
-
         }
         yield return new WaitForSeconds(2f);
         Destroy(gameObject);

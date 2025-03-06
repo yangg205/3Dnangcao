@@ -146,6 +146,7 @@ public class BoomerAi : MonoBehaviour
                         if(hp != null)
                         {
                             hp.TakeDamage(10);
+                    Debug.Log("Boomer explosion");
                         }
                        
                     }
