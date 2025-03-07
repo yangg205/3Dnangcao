@@ -9428,7 +9428,7 @@ PrefabInstance:
       objectReference: {fileID: 1827783547}
     - target: {fileID: 2892864511737799287, guid: 4c2fad69e82213f4797e7691eda1efe9, type: 3}
       propertyPath: attackRange
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2892864511737799287, guid: 4c2fad69e82213f4797e7691eda1efe9, type: 3}
       propertyPath: audioSource
