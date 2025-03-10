@@ -34,7 +34,7 @@ public class Information : MonoBehaviour
     private void Update()
     {
         // Hiển thị/Ẩn con trỏ khi nhấn ESC
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.LeftControl))
         {
             ToggleCursor(!isCursorVisible);
         }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class StartUi : MonoBehaviour
 {
@@ -28,7 +29,10 @@ public class StartUi : MonoBehaviour
         Application.Quit();
     }
 
-
+    public void LogOut()
+    {
+        SceneManager.LoadScene("Map");
+    }
     IEnumerator ResetPointAndStartGame(string email)
     {
         string apiUrl = "http://yang2206-001-site1.ptempurl.com/api/resetpoint";

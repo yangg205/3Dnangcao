@@ -143,6 +143,7 @@ public class PlayerMovement : MonoBehaviour
         // Reset trạng thái chuột và load Scene
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     }
     public void Heal(int healAmount)

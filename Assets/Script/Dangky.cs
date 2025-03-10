@@ -10,6 +10,7 @@ public class Dangky : MonoBehaviour
     public TMP_InputField passwordInput;
     public TextMeshProUGUI notificationText; // Hiển thị thông báo đăng ký
     public GameObject notificationPanel; // Panel hiển thị thông báo
+    public Loading loading;
 
     private void Start()
     {
@@ -79,7 +80,8 @@ public class Dangky : MonoBehaviour
                     Debug.Log("Đăng ký thành công, chuyển tới Map 1.");
                     PlayerPrefs.SetString("email", emailInput.text); // Lưu email để sử dụng sau
                     PlayerPrefs.Save();
-                    UnityEngine.SceneManagement.SceneManager.LoadScene("Map 1");
+                    //UnityEngine.SceneManagement.SceneManager.LoadScene("Map 1");
+                    loading.StartLoading();
                 }
                 else
                 {

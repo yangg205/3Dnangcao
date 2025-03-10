@@ -9,6 +9,7 @@ public class Dangnhap : MonoBehaviour
     public TMP_InputField passwordInput;
     public TextMeshProUGUI notificationText; // Thông báo trạng thái đăng nhập
     public GameObject notificationPanel; // Panel hiển thị thông báo
+    public Loading loading;
 
     private void Start()
     {
@@ -76,7 +77,8 @@ public class Dangnhap : MonoBehaviour
                     // Lưu email và tên người chơi vào PlayerPrefs
                     PlayerPrefs.SetString("email", emailInput.text);
                     PlayerPrefs.Save();
-                    UnityEngine.SceneManagement.SceneManager.LoadScene("Map 1");
+                    //UnityEngine.SceneManagement.SceneManager.LoadScene("Map 1");
+                    loading.StartLoading();
                 }
                 else
                 {
