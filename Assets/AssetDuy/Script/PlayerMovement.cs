@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using Fusion;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : NetworkBehaviour
 {
     //Player Health
     public int maxHealth = 100;
@@ -46,25 +47,50 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
-        //Debug.Log(GameManager.instance.currentScore);
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        if (isGrounded && velocity.y < 0)
-        {
-            velocity.y = -2f;
-        }
-        HandleMovement();
-        HandleGravity();
+        ////Debug.Log(GameManager.instance.currentScore);
+        //isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        //if (isGrounded && velocity.y < 0)
+        //{
+        //    velocity.y = -2f;
+        //}
+        //HandleMovement();
+        //HandleGravity();
 
-        //Handle Jump
-        if(Input.GetButtonDown("Jump") && isGrounded)
-        {
-            velocity.y = Mathf.Sqrt(jumpForce - 2 * gravity);
-        }
-        controller.Move(velocity * Time.deltaTime);
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-    {
-        GameManager.instance.UseHealthPack();
+        ////Handle Jump
+        //if (Input.GetButtonDown("Jump") && isGrounded)
+        //{
+        //    velocity.y = Mathf.Sqrt(jumpForce - 2 * gravity);
+        //}
+        //controller.Move(velocity * Time.deltaTime);
+        //if (Input.GetKeyDown(KeyCode.Alpha4))
+        //{
+        //    GameManager.instance.UseHealthPack();
+        //}
     }
+    public override void FixedUpdateNetwork()
+    {
+        if (Object.HasStateAuthority)
+        {
+            //Debug.Log(GameManager.instance.currentScore);
+            isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+            if (isGrounded && velocity.y < 0)
+            {
+                velocity.y = -2f;
+            }
+            HandleMovement();
+            HandleGravity();
+
+            //Handle Jump
+            if (Input.GetButtonDown("Jump") && isGrounded)
+            {
+                velocity.y = Mathf.Sqrt(jumpForce - 2 * gravity);
+            }
+            controller.Move(velocity * Time.deltaTime);
+            if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                GameManager.instance.UseHealthPack();
+            }
+        }
     }
     void HandleMovement()
     {
@@ -152,4 +178,5 @@ public class PlayerMovement : MonoBehaviour
         healthSlider.value = currentHealth;
         Debug.Log($"Hồi {healAmount} máu! Máu hiện tại: {currentHealth}/{maxHealth}");
     }
+
 }
